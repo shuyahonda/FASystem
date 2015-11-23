@@ -7,12 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="400">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="90*"/>
-            <RowDefinition Height="583*"/>
-        </Grid.RowDefinitions>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="31,45,0,0" TextWrapping="Wrap" Text="トレーニング" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="設定" Margin="310,45,10,25"/>
+        <Canvas x:Name="canvas" Margin="0,0,0,0.5"/>
 
     </Grid>
 </Window>
