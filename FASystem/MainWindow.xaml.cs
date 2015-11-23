@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Kinect;
 
 namespace FASystem
 {
@@ -20,9 +21,79 @@ namespace FASystem
     /// </summary>
     public partial class MainWindow : Window
     {
+        private KinectSensor kinect;
+        private FrameDescription colorFrameDescription;
+        private ColorImageFormat colorImageFormat;
+        private ColorFrameReader colorFrameReader;
+
+
         public MainWindow()
         {
             InitializeComponent();
+
+            // Init Kinect
+            this.kinect = KinectSensor.GetDefault();
+
+            this.colorImageFormat = ColorImageFormat.Bgra;
+            this.colorFrameDescription
+                = this.kinect.ColorFrameSource.CreateFrameDescription(this.colorImageFormat);
+            this.colorFrameReader = this.kinect.ColorFrameSource.OpenReader();
+            this.colorFrameReader.FrameArrived += ColorFrameReader_FrameArrived;
+
+            this.kinect.Open();
+
+
         }
+
+        private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
+        {
+            ColorFrame colorFrame = e.FrameReference.AcquireFrame();
+
+            // フレームが上手く取得出来ない場合がある。
+            if (colorFrame == null) return;
+
+            //画素情報を確保するバッファを用意する。
+            //高さ * 幅 * 画素あたりのデータ量だけ保存できれば良い
+            byte[] colors = new byte[this.colorFrameDescription.Width
+                                     * this.colorFrameDescription.Height
+                                     * this.colorFrameDescription.BytesPerPixel];
+
+            //用意した領域に画素情報を複製する
+            BitmapSource bitmapSource = BitmapSource.Create(this.colorFrameDescription.Width,
+                                                            this.colorFrameDescription.Height
+                                                            96,
+                                                            96,
+                                                            PixelFormats.Bgr32,
+                                                            null
+                                                            , colors,
+                                                            this.colorFrameDescription.Width * (int)this.colorFrameDescription.BytesPerPixel);
+
+            //キャンバスに表示する
+            this.canvas.Background = new ImageBrush(bitmapSource);
+
+            //取得したフレームを放棄する
+            colorFrame.Dispose();
+        }
+
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            //カラー画像の取得を中止して、関連するリソースを放棄する
+            if (this.colorFrameReader != null)
+            {
+                this.colorFrameReader.Dispose();
+                this.colorFrameReader = null;
+            }
+
+            //Kinectを停止いて、関連するリソースを放棄する。
+            if (this.kinect != null)
+            {
+                this.kinect.Close();
+                this.kinect = null;
+            }
+        }
+
     }
 }
