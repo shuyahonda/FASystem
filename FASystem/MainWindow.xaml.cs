@@ -47,6 +47,7 @@ namespace FASystem
 
         private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
+         
             ColorFrame colorFrame = e.FrameReference.AcquireFrame();
 
             // フレームが上手く取得出来ない場合がある。
@@ -58,14 +59,16 @@ namespace FASystem
                                      * this.colorFrameDescription.Height
                                      * this.colorFrameDescription.BytesPerPixel];
 
+            colorFrame.CopyConvertedFrameDataToArray(colors, this.colorImageFormat);
+
             //用意した領域に画素情報を複製する
             BitmapSource bitmapSource = BitmapSource.Create(this.colorFrameDescription.Width,
-                                                            this.colorFrameDescription.Height
+                                                            this.colorFrameDescription.Height,
                                                             96,
                                                             96,
-                                                            PixelFormats.Bgr32,
-                                                            null
-                                                            , colors,
+                                                            PixelFormats.Bgra32,
+                                                            null,
+                                                            colors,
                                                             this.colorFrameDescription.Width * (int)this.colorFrameDescription.BytesPerPixel);
 
             //キャンバスに表示する
