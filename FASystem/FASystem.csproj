@@ -68,12 +68,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enum\FixType.cs" />
+    <Compile Include="Enum\PlaneType.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\AngleRange.cs" />
+    <Compile Include="Model\FixTrackingTarget.cs" />
+    <Compile Include="Model\RangeTrackingTarget.cs" />
+    <Compile Include="Model\Tempo.cs" />
+    <Compile Include="Model\TrainingInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
