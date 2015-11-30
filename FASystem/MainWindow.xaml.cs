@@ -60,7 +60,7 @@ namespace FASystem
 
             //用意した領域に画素情報を複製する
             BitmapSource bitmapSource = BitmapSource.Create(this.colorFrameDescription.Width,
-                                                            this.colorFrameDescription.Height
+                                                            this.colorFrameDescription.Height,
                                                             96,
                                                             96,
                                                             PixelFormats.Bgr32,
