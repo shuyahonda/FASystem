@@ -72,7 +72,7 @@ namespace FASystem
                                                             this.colorFrameDescription.Width * (int)this.colorFrameDescription.BytesPerPixel);
 
             //キャンバスに表示する
-            this.canvas.Background = new ImageBrush(bitmapSource);
+            this.cameraCanvas.Background = new ImageBrush(bitmapSource);
 
             //取得したフレームを放棄する
             colorFrame.Dispose();

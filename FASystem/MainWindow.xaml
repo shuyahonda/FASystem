@@ -16,7 +16,7 @@
             <RowDefinition Height="465*"/>
             <RowDefinition Height="100*"/>
         </Grid.RowDefinitions>
-        <Canvas x:Name="canvas" Margin="0,0,0,1" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Canvas x:Name="cameraCanvas" Margin="0,0,0,1" Grid.Row="1"/>
         <Canvas Grid.ColumnSpan="2" Background="#FF96D788" Margin="0,0,0,1"/>
         <Border BorderThickness="1" Background="#FFAEADAD" BorderBrush="#FFA5A5A5" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="MessageQueue" Margin="0,10" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="32" VerticalAlignment="Center" Foreground="#FF2E2E2E"/>
