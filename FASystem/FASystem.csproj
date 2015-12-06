@@ -78,6 +78,8 @@
   <ItemGroup>
     <Compile Include="Model\AngleRange.cs" />
     <Compile Include="Model\FixTrackingTarget.cs" />
+    <Compile Include="Model\Message.cs" />
+    <Compile Include="Model\MessageQueue.cs" />
     <Compile Include="Model\RangeTrackingTarget.cs" />
     <Compile Include="Model\Tempo.cs" />
     <Compile Include="Model\TrainingInfo.cs" />

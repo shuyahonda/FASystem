@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
+using FASystem.Model;
 
 namespace FASystem
 {
@@ -25,6 +26,7 @@ namespace FASystem
         private FrameDescription colorFrameDescription;
         private ColorImageFormat colorImageFormat;
         private ColorFrameReader colorFrameReader;
+        private TrainingInfo trainingInfo;
 
 
         public MainWindow()
