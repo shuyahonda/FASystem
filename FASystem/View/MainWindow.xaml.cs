@@ -26,8 +26,9 @@ namespace FASystem
         private FrameDescription colorFrameDescription;
         private ColorImageFormat colorImageFormat;
         private ColorFrameReader colorFrameReader;
-        private TrainingInfo trainingInfo;
 
+        private TrainingInfo trainingInfo;
+        private List<TrainingInfo> trainingList;
 
         public MainWindow()
         {
@@ -44,7 +45,7 @@ namespace FASystem
 
             this.kinect.Open();
 
-
+            this.trainingList = new List<TrainingInfo>();
         }
 
         private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
