@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Model
 {
-    class FixTrackingTarget
+    public class FixTrackingTarget
     {
         [JsonProperty("fixType")]
         public FixType FixType;

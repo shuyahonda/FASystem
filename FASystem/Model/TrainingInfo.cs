@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Model
 {
-    class TrainingInfo
+    public class TrainingInfo
     {
         [JsonProperty("trainingName")]
         public String TrainingName { get; set; }

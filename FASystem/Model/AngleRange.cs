@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Model
 {
-    class AngleRange
+    public class AngleRange
     {
         [JsonProperty("start")]
         public float Start { get; set; }

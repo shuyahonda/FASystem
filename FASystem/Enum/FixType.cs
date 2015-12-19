@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Enum
 {
-    enum FixType
+    public enum FixType
     {
         UpAndDownFix,
         LeftAndRightFix,

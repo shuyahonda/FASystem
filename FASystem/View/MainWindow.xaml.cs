@@ -27,7 +27,7 @@ namespace FASystem
         private ColorImageFormat colorImageFormat;
         private ColorFrameReader colorFrameReader;
 
-        private TrainingInfo trainingInfo;
+        public TrainingInfo TrainingInfo { get; set; }
         //private List<TrainingInfo> trainingList;
 
         public MainWindow()
@@ -112,7 +112,7 @@ namespace FASystem
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            if (trainingInfo == null)
+            if (TrainingInfo == null)
             {
                 this.showSettingWindow();
             }

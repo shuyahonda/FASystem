@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Enum
 {
-    enum PlaneType
+    public enum PlaneType
     {
         SagittalPlane,
         CoronalPlane,

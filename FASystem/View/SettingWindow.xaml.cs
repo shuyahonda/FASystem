@@ -87,6 +87,9 @@ namespace FASystem
             Console.WriteLine("selectedItem ->" + trainingInfo.TrainingName);
 
             // MainWindosにtrainingInfoを渡したい
+            MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+            mainWindow.TrainingInfo = trainingInfo;
+            this.Close();
         }
     }
     

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Model
 {
-    class RangeTrackingTarget
+    public class RangeTrackingTarget
     {
         public Boolean isUserUnitVector { get; set; }
         public Boolean isManageTempo { get; set; }

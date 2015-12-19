@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Model
 {
-    class Tempo
+    public class Tempo
     {
         [JsonProperty("restTimeInBottom")]
         public float RestTimeInBottom{ get; set; }
