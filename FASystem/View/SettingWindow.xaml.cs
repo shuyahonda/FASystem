@@ -31,9 +31,10 @@ namespace FASystem
 
             // Init Property
             this.trainingInfos = new List<TrainingInfo>();
-
+            trainingList.ItemsSource = trainingInfos;
 
             this.loadTrainingInfos();
+
         }
           
 
@@ -78,6 +79,14 @@ namespace FASystem
             this.trainingInfos.Add(trainingInfo);
 
             Console.WriteLine(this.trainingInfos.First().TrainingName);
+        }
+
+        private void trainingList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TrainingInfo trainingInfo = (TrainingInfo)trainingList.SelectedItem;
+            Console.WriteLine("selectedItem ->" + trainingInfo.TrainingName);
+
+            // MainWindosにtrainingInfoを渡したい
         }
     }
     

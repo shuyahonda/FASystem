@@ -8,7 +8,7 @@
         Title="SettingWindow" Height="300" Width="300">
     <Grid>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="トレーニングを選択してください" VerticalAlignment="Top"/>
-        <ListBox x:Name="trainingList" Margin="10,40,10,10.5"/>
+        <ListBox x:Name="trainingList" Margin="10,40,10,10.5" DisplayMemberPath="TrainingName" SelectionChanged="trainingList_SelectionChanged"/>
 
     </Grid>
 </Window>
