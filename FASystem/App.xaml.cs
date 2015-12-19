@@ -28,7 +28,7 @@ namespace FASystem
         /// <param name="e">イベント データ。</param>
         protected override void OnStartup(StartupEventArgs e)
         {
-            Console.WriteLine("OnStartup");
+            
         }
     }
 }

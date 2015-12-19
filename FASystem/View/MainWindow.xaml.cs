@@ -28,7 +28,7 @@ namespace FASystem
         private ColorFrameReader colorFrameReader;
 
         private TrainingInfo trainingInfo;
-        private List<TrainingInfo> trainingList;
+        //private List<TrainingInfo> trainingList;
 
         public MainWindow()
         {
@@ -45,7 +45,9 @@ namespace FASystem
 
             this.kinect.Open();
 
-            this.trainingList = new List<TrainingInfo>();
+            // this.trainingList = new List<TrainingInfo>();
+
+           
         }
 
         private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
@@ -101,5 +103,19 @@ namespace FASystem
             }
         }
 
+
+        private void showSettingWindow()
+        {
+            Window settingWindow = new SettingWindow();
+            settingWindow.Show();
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            if (trainingInfo == null)
+            {
+                this.showSettingWindow();
+            }
+        }
     }
 }

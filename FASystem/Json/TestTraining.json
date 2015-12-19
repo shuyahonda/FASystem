@@ -1,10 +1,9 @@
 ﻿{
   "trainingName": "TestTraining",
 
-  //角度追跡
+  
   "rangeTrackingTarget": {
 
-    "UnitVector": "3.0",
     "isUseUnitVector": true,
     "isManageTempo": true,
 
@@ -13,7 +12,6 @@
       "end": 50
     },
 
-    //教則グラフ生成用データ
     "tempo": {
       "restTimeInBottom": 1.0,
       "restTimeInTop": 1.0,
@@ -21,7 +19,6 @@
       "riseMovementTime": 2.0
     },
 
-    //列挙型
     "planeType": "SagittalPlane",
     "origin": "AnkleLeft",
     "vector": [
@@ -30,13 +27,11 @@
     ] 
   },
 
-  //固定点追跡
   "fixTrackingTarget": {
 
     "permissibleRange": 1.0,
     "fixType": "UpAndDownFix",
     
-    //列挙型
     "targetJoint": [
       { "jointType": "AnkleLeft" },
       { "jointType": "Head" },
