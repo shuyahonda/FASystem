@@ -1,31 +1,49 @@
 ﻿{
   "trainingName": "TestTraining",
 
-  
-  "rangeTrackingTarget": {
 
-    "isUseUnitVector": true,
-    "isManageTempo": true,
+  "rangeTrackingTargets": 
+    [
+      {
+        "isUseUnitVector": true,
+        "isManageTempo": true,
 
-    "angleRange": {
-      "start": 10,
-      "end": 50
-    },
+        "permissibleRangeInBottom": {
+          "start": 170,
+          "end": 160
+        },
 
-    "tempo": {
-      "restTimeInBottom": 1.0,
-      "restTimeInTop": 1.0,
-      "downwardMovementTime": 3.0,
-      "riseMovementTime": 2.0
-    },
+        "prohibitedRangeInBottom": {
+          "end": 171,
+          "start": 180
+        },
+
+        "permissibleRangeInTop": {
+          "start": 30,
+          "end": 40
+        },
+
+        "prohibitedRangeInTop": {
+          "start": 10,
+          "end": 20
+        },
+
+        "tempo": {
+          "restTimeInBottom": 1.0,
+          "restTimeInTop": 1.0,
+          "downwardMovementTime": 3.0,
+          "riseMovementTime": 2.0
+        }
+      }
+    ],
 
     "planeType": "SagittalPlane",
     "origin": "AnkleLeft",
     "vector": [
-      {"jointType": "ElbowRight" },
-      {"jointType": "ElbowRight"}
-    ] 
-  },
+      { "jointType": "ElbowRight" },
+      { "jointType": "ElbowRight" }
+    ],
+  
 
   "fixTrackingTarget": {
 

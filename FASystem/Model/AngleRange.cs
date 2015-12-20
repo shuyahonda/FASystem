@@ -14,5 +14,11 @@ namespace FASystem.Model
 
         [JsonProperty("end")]
         public float End { get; set; }
+
+
+        public float calcAverage()
+        {
+            return (Start + End) / 2;
+        }
     }
 }

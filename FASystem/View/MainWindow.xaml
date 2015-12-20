@@ -20,7 +20,7 @@
         <Canvas x:Name="cameraCanvas" Margin="0,0,0,1" Grid.Row="1"/>
         <Canvas Grid.ColumnSpan="2" Background="#FF96D788" Margin="0,0,0,1"/>
         <Border BorderThickness="1" Background="#FFAEADAD" BorderBrush="#FFA5A5A5" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="MessageQueue" Margin="0,10" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="32" VerticalAlignment="Center" Foreground="#FF2E2E2E"/>
+        <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,10" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center"/>
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,1,0,0.5" Background="#FFBCB1B1" Grid.Row="2">
             <sparrow:SparrowChart x:Name="ChartLeft" Margin="0,0,0,0" Grid.Row="1" Width="200" >
                 <sparrow:SparrowChart.XAxis>
@@ -29,7 +29,7 @@
                 <sparrow:SparrowChart.YAxis>
                     <sparrow:LinearYAxis MaxValue="1" MinValue="-1" Header="X(m)" />
                 </sparrow:SparrowChart.YAxis>
-                <sparrow:LineSeries XPath="Frame" YPath="Coordinate" Stroke="#FF2B33EC" StrokeThickness="2" />
+                <sparrow:LineSeries PointsSource="{Binding collection}" XPath="X" YPath="Y" Stroke="#FF2B33EC" StrokeThickness="2" />
             </sparrow:SparrowChart>
             <sparrow:SparrowChart x:Name="ChartRight" Margin="0,0,0,0" Width="200" >
                 <sparrow:SparrowChart.XAxis>

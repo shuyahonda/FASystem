@@ -47,7 +47,6 @@ namespace FASystem
 
             // this.trainingList = new List<TrainingInfo>();
 
-           
         }
 
         private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
@@ -116,6 +115,13 @@ namespace FASystem
             {
                 this.showSettingWindow();
             }
+        }
+
+        public void initTeachChart()
+        {
+            Console.WriteLine(this.TrainingInfo.TrainingName);
+            Console.WriteLine(this.TrainingInfo.RangeTrackingTargets.Count);
+            this.ChartLeft.DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
         }
     }
 }
