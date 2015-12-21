@@ -93,27 +93,6 @@ namespace FASystem
         /* フレームが来る度に呼び出される.距離の単位はメートル.*/
         private void bodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
-            if (this.isReading == false) return;
-
-            this.frameSkip++;
-            if (this.frameSkip != 6) return;
-            this.frameSkip = 0;
-
-            if (CoordinateWithFrame.Count >= 400)
-            {
-                this.coordinates.X.Clear();
-                this.coordinates.Y.Clear();
-                this.coordinates.Z.Clear();
-                CoordinateWithFrame.initCount();
-                //return;
-            }
-            //this.chartX.XAxis.MinValue = coordinates.X.Count - 70;
-            //this.chartY.XAxis.MinValue = coordinates.Y.Count - 70;
-            //this.chartZ.XAxis.MinValue = coordinates.Z.Count - 70;
-
-            JointType selectedJoint = (JointType)Enum.Parse(typeof(JointType), this.jointsComboBox.SelectedItem.ToString());
-
-            // Collectionにデータを追加する
             using (var bodyFrame = e.FrameReference.AcquireFrame())
             {
                 if (bodyFrame == null)
@@ -127,46 +106,35 @@ namespace FASystem
                 //ボディがトラッキングできている
                 foreach (var body in bodies.Where(b => b.IsTracked))
                 {
-                    CoordinateWithFrame x = new CoordinateWithFrame((double)body.Joints[selectedJoint].Position.X);
-                    CoordinateWithFrame y = new CoordinateWithFrame((double)body.Joints[selectedJoint].Position.Y);
-                    CoordinateWithFrame z = new CoordinateWithFrame((double)body.Joints[selectedJoint].Position.Z);
-                    //Console.WriteLine((double)body.Joints[selectedJoint].Position.Z);
-                    x.countUp();
-                    y.countUp();
-                    z.countUp();
+                    // TrainingInfoを利用して原点と２つのベクトルから角度を求める
 
-                    /*
-                    if (coordinates.X.Count == 80) coordinates.X.Clear();
-                    if (coordinates.Y.Count == 80) coordinates.Y.Clear();
-                    if (coordinates.Z.Count == 80) coordinates.Z.Clear();
-                      */
-                    /*
-                  if (this.coordinates.X.Count >= 50)
-                  {
-                      Console.WriteLine("100以上");
-                      this.chartX.XAxis.MinValue = (int)this.chartX.XAxis.MaxValue - 50;
-                  }
-                  Console.WriteLine();
-                  */
+                    // テスト用に右肘を原点、右手首と右肩をベクトルとして角度を求める
+                    // 角度を求めて,UserAngleCollectionへAdd
 
 
-                    this.coordinates.X.Add(x);
-                    this.coordinates.Y.Add(y);
-                    this.coordinates.Z.Add(z);
+                    // 右手首の座標を取得
+                    var rightWristX = body.Joints[JointType.WristRight].Position.X;
+                    var rightWristY = body.Joints[JointType.WristRight].Position.Y;
+                    // 右肘の座標を取得 （原点 - B )
+                    var rightElbowX = body.Joints[JointType.ElbowRight].Position.X;
+                    var rightElbowY = body.Joints[JointType.ElbowRight].Position.Y;
+                    // 右肩の座標を取得
+                    var rightShoulderX = body.Joints[JointType.ShoulderRight].Position.X;
+                    var rightShoulderY = body.Joints[JointType.ShoulderRight].Position.Y;
 
-                    if (body.Joints[selectedJoint].TrackingState == TrackingState.Tracked)
-                    {
-                        setTrackingStateLabelColor(true, false, false);
-                    }
-                    else if (body.Joints[selectedJoint].TrackingState == TrackingState.Inferred)
-                    {
-                        setTrackingStateLabelColor(false, true, false);
-                    }
-                    else if (body.Joints[selectedJoint].TrackingState == TrackingState.NotTracked)
-                    {
-                        setTrackingStateLabelColor(false, false, true);
-                    }
+                    var wristVectorX = rightWristX - rightElbowX;
+                    var wristVectorY = rightWristY - rightElbowY;
 
+                    var shoulderVectorX = rightShoulderX - rightElbowX;
+                    var shoulderVectorY = rightShoulderY - rightElbowY;
+
+                    var cos = (wristVectorX * wristVectorY + shoulderVectorX * shoulderVectorY) / 
+                        ((Math.Sqrt(Math.Pow(wristVectorX,2) + Math.Pow(wristVectorY,2)) * Math.Sqrt(Math.Pow(shoulderVectorX,2) + Math.Pow(shoulderVectorY,2))));
+
+                    var angle = Math.Acos(cos);
+                    Console.WriteLine(angle);
+
+                    
                 }
             }
         }
