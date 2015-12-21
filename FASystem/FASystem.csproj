@@ -83,11 +83,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helper\CommonConstants.cs" />
+    <Compile Include="Helper\Utility.cs" />
     <Compile Include="Model\GraphPoint.cs" />
     <Compile Include="ViewModel\TrainingInfoViewModel.cs" />
-    <Compile Include="View\SettingWindow.xaml.cs">
-      <DependentUpon>SettingWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\TrainingListWindow.xaml.cs">
       <DependentUpon>TrainingListWindow.xaml</DependentUpon>
     </Compile>
@@ -105,10 +104,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\SettingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\TrainingListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -150,12 +145,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helper\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\TestTraining.txt" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>

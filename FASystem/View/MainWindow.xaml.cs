@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 using FASystem.Model;
 using System.Collections.ObjectModel;
+using FASystem.Helper;
 
 namespace FASystem
 {
@@ -48,22 +49,18 @@ namespace FASystem
         {
             InitializeComponent();
 
-            // Init Kinect
+            // Init Kinect Sensors
             this.kinect = KinectSensor.GetDefault();
-
             this.colorImageFormat = ColorImageFormat.Bgra;
             this.colorFrameDescription = this.kinect.ColorFrameSource.CreateFrameDescription(this.colorImageFormat);
             this.colorFrameReader = this.kinect.ColorFrameSource.OpenReader();
             this.colorFrameReader.FrameArrived += ColorFrameReader_FrameArrived;
-
             bodyFrameReader = kinect.BodyFrameSource.OpenReader();
             bodyFrameReader.FrameArrived += bodyFrameReader_FrameArrived;
-
             this.kinect.Open();
-
             this.bodies = this.bodies = new Body[kinect.BodyFrameSource.BodyCount];
-            this.UserAngleCollection = new ObservableCollection<GraphPoint>();
 
+            this.UserAngleCollection = new ObservableCollection<GraphPoint>();
         }
 
 
@@ -160,20 +157,17 @@ namespace FASystem
                     var cos = (wristVectorY * shoulderVectorY + wristVectorZ * shoulderVectorZ) /
                         ((Math.Sqrt(Math.Pow(wristVectorY, 2) + Math.Pow(wristVectorZ, 2)) * Math.Sqrt(Math.Pow(shoulderVectorY, 2) + Math.Pow(shoulderVectorZ, 2))));
 
-                    var angle = Math.Acos(cos) * 180 / Math.PI;
+                    var angle = Utility.radToPI(Math.Acos(cos));
 
                     GraphPoint point = new GraphPoint(count, (int)angle);
                     this.UserAngleCollection.Add(point);
-                   
-
-                   
                 }
             }
         }
 
         /// <summary>
         /// Windowを閉じたときの処理
-        /// Kinectの初期化を行う
+        /// Kinectを閉じる
         /// </summary>
         /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
@@ -195,16 +189,20 @@ namespace FASystem
             }
         }
 
-
         /// <summary>
         /// トレーニング情報を設定するためのウィンドウを表示する
         /// </summary>
         private void showSettingWindow()
         {
-            Window settingWindow = new SettingWindow();
+            Window settingWindow = new TrainingListWindow();
             settingWindow.Show();
         }
 
+        /// <summary>
+        /// Windowが描画されたときに呼ばれる
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             if (TrainingInfo == null)
@@ -212,7 +210,6 @@ namespace FASystem
                 this.showSettingWindow();
             }
         }
-
 
         /// <summary>
         /// グラフ表示部の初期化処理
@@ -223,7 +220,7 @@ namespace FASystem
             this.ChartLeft.Series.First().DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
             this.ChartLeft.Series.Last().DataContext = this.UserAngleCollection;
 
-            // Init Chart Width
+            // Init Chart Widthdd
             RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
             this.ChartLeft.MaxWidth = ((target.Tempo.DownwardMovementTime + target.Tempo.RestTimeInBottom + target.Tempo.RiseMovementTime + target.Tempo.RestTimeInTop) * 30);
         }
