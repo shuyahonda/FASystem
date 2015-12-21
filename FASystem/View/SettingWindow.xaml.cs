@@ -85,7 +85,7 @@ namespace FASystem
         {
             TrainingInfo trainingInfo = (TrainingInfo)trainingList.SelectedItem;
             Console.WriteLine("selectedItem ->" + trainingInfo.TrainingName);
-
+            Console.WriteLine(trainingInfo.RangeTrackingTargets.First().PermissibleRangeInTop.calcAverage());
             // MainWindosにtrainingInfoを渡したい
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow.TrainingInfo = trainingInfo;

@@ -46,7 +46,7 @@ namespace FASystem.Model
 
         public float getAllTime()
         {
-            return Tempo.RestTimeInBottom + Tempo.RestTimeInTop + Tempo.DownwardMovementTime + Tempo.RiseMomementTime;
+            return Tempo.RestTimeInBottom + Tempo.RestTimeInTop + Tempo.DownwardMovementTime + Tempo.RiseMovementTime;
         }
 
         public float getXRange()
@@ -66,17 +66,32 @@ namespace FASystem.Model
                 float restTimeInTop = this.Tempo.RestTimeInTop;
                 float y = 0;
 
-                if (x <= restTimeInBottom)
+                if (x < restTimeInBottom * kinectFPS)
                 {
-                    y = restTimeInBottom;
+                    // 下降時の休憩 180
+                    y = PermissibleRangeInBottom.calcAverage() ;
+                } else if(x >= restTimeInBottom * kinectFPS && x <= (restTimeInBottom + Tempo.RiseMovementTime) * kinectFPS)
+                {
+                    // 上昇中　180 -> 30
+                    float downRange = (PermissibleRangeInBottom.calcAverage() - PermissibleRangeInTop.calcAverage()) / Tempo.RiseMovementTime / kinectFPS;
+                    Console.WriteLine("downRange" + downRange);
+                    y = PermissibleRangeInBottom.calcAverage() - downRange * (x - restTimeInBottom * kinectFPS);
+                } else if(x >= (restTimeInBottom + Tempo.RiseMovementTime) * kinectFPS && x <= (restTimeInBottom + Tempo.RiseMovementTime + restTimeInTop) * kinectFPS)
+                {
+                    // 上昇時の休憩 30
+                    y = PermissibleRangeInTop.calcAverage();
                 } else
-                { 
-
-                    float upRange = Tempo.RiseMomementTime / (ProhibitedRangeInTop.calcAverage() - PermissibleRangeInBottom.calcAverage());
-                    y = restTimeInBottom + upRange * (x - restTimeInBottom);
+                {
+                    // 上昇からの下降 30 -> 180
+                    float upRange = (PermissibleRangeInBottom.calcAverage() - PermissibleRangeInTop.calcAverage()) / Tempo.DownwardMovementTime / kinectFPS;
+                    Console.WriteLine("upRange" + upRange);
+                    y = PermissibleRangeInTop.calcAverage() + upRange * (x - (restTimeInTop + restTimeInBottom + Tempo.RiseMovementTime) * kinectFPS);
                 }
+                
+                
 
-                GraphPoint point = new GraphPoint(x,y);
+                Console.WriteLine("Add Point = " + x + "," + y);
+                GraphPoint point = new GraphPoint(x,(int)y);
                 collection.Add(point);
             }
 

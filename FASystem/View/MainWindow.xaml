@@ -24,12 +24,12 @@
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,1,0,0.5" Background="#FFBCB1B1" Grid.Row="2">
             <sparrow:SparrowChart x:Name="ChartLeft" Margin="0,0,0,0" Grid.Row="1" Width="200" >
                 <sparrow:SparrowChart.XAxis>
-                    <sparrow:LinearXAxis MaxValue="400" MinValue="1" ShowCrossLines="True"/>
+                    <sparrow:LinearXAxis MaxValue="210" MinValue="1" ShowCrossLines="True"/>
                 </sparrow:SparrowChart.XAxis>
                 <sparrow:SparrowChart.YAxis>
-                    <sparrow:LinearYAxis MaxValue="1" MinValue="-1" Header="X(m)" />
+                    <sparrow:LinearYAxis MaxValue="200" MinValue="1" />
                 </sparrow:SparrowChart.YAxis>
-                <sparrow:LineSeries PointsSource="{Binding collection}" XPath="X" YPath="Y" Stroke="#FF2B33EC" StrokeThickness="2" />
+                <sparrow:LineSeries PointsSource="{Binding}" XPath="X" YPath="Y" Stroke="#FF2B33EC" StrokeThickness="2" />
             </sparrow:SparrowChart>
             <sparrow:SparrowChart x:Name="ChartRight" Margin="0,0,0,0" Width="200" >
                 <sparrow:SparrowChart.XAxis>

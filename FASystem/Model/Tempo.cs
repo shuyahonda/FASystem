@@ -19,8 +19,8 @@ namespace FASystem.Model
         [JsonProperty("downwardMovementTime")]
         public float DownwardMovementTime { get; set; }
 
-        [JsonProperty("riseMomentTime")]
-        public float RiseMomementTime { get; set; } 
+        [JsonProperty("riseMovementTime")]
+        public float RiseMovementTime { get; set; } 
 
     }
 }

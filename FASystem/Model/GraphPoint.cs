@@ -8,10 +8,10 @@ namespace FASystem.Model
 {
     public class GraphPoint
     {
-        public float X { get; set; }
-        public float Y { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
 
-        public GraphPoint(float X,float Y)
+        public GraphPoint(int X,int Y)
         {
             this.X = X;
             this.Y = Y;
