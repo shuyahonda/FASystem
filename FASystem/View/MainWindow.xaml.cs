@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Kinect;
 using FASystem.Model;
 using System.Collections.ObjectModel;
@@ -23,21 +14,36 @@ namespace FASystem
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Kinect関連
+        /// </summary>
         private KinectSensor kinect;
-
         private FrameDescription colorFrameDescription;
         private ColorImageFormat colorImageFormat;
-
         private ColorFrameReader colorFrameReader;
         private BodyFrameReader bodyFrameReader;
-
         private Body[] bodies;
 
+        /// <summary>
+        /// SettingWindowから送られてくるトレーニング情報
+        /// FBに必要な情報はすべてこの中に入っている
+        /// </summary>
         public TrainingInfo TrainingInfo { get; set; }
+
+        /// <summary>
+        /// ユーザーの関節角度を管理するコレクション
+        /// Chartへ反映される
+        /// </summary>
         private ObservableCollection<GraphPoint> UserAngleCollection { get; set; }
 
+        /// <summary>
+        /// こいつは別のところで管理したい
+        /// </summary>
         private int count = 0;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -46,23 +52,26 @@ namespace FASystem
             this.kinect = KinectSensor.GetDefault();
 
             this.colorImageFormat = ColorImageFormat.Bgra;
-            this.colorFrameDescription
-                = this.kinect.ColorFrameSource.CreateFrameDescription(this.colorImageFormat);
+            this.colorFrameDescription = this.kinect.ColorFrameSource.CreateFrameDescription(this.colorImageFormat);
             this.colorFrameReader = this.kinect.ColorFrameSource.OpenReader();
             this.colorFrameReader.FrameArrived += ColorFrameReader_FrameArrived;
 
             bodyFrameReader = kinect.BodyFrameSource.OpenReader();
             bodyFrameReader.FrameArrived += bodyFrameReader_FrameArrived;
 
-            
-
-
             this.kinect.Open();
 
             this.bodies = this.bodies = new Body[kinect.BodyFrameSource.BodyCount];
             this.UserAngleCollection = new ObservableCollection<GraphPoint>();
+
         }
 
+
+        /// <summary>
+        /// Kinectセンサーからのカラー画像のハンドリング
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
          
@@ -96,7 +105,12 @@ namespace FASystem
             colorFrame.Dispose();
         }
 
-        /* フレームが来る度に呼び出される.距離の単位はメートル.*/
+        /// <summary>
+        /// Kinectセンサーからの骨格情報のハンドリング
+        /// 単位はメートル
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             if (this.TrainingInfo == null) return;
@@ -126,8 +140,7 @@ namespace FASystem
 
                     // テスト用に右肘を原点、右手首と右肩をベクトルとして角度を求める
                     // 角度を求めて,UserAngleCollectionへAdd
-
-
+                  
                     // 右手首の座標を取得
                     var rightWristY = body.Joints[JointType.WristRight].Position.Y * 100;
                     var rightWristZ = body.Joints[JointType.WristRight].Position.Z * 100;
@@ -144,19 +157,25 @@ namespace FASystem
                     var shoulderVectorY = rightShoulderY - rightElbowY;
                     var shoulderVectorZ = rightShoulderZ - rightElbowZ;
 
-                    var cos = (wristVectorY * shoulderVectorY + wristVectorZ * shoulderVectorZ) / 
-                        ((Math.Sqrt(Math.Pow(wristVectorY,2) + Math.Pow(wristVectorZ,2)) * Math.Sqrt(Math.Pow(shoulderVectorY,2) + Math.Pow(shoulderVectorZ,2))));
-                    //Console.WriteLine("cos = " + cos);
+                    var cos = (wristVectorY * shoulderVectorY + wristVectorZ * shoulderVectorZ) /
+                        ((Math.Sqrt(Math.Pow(wristVectorY, 2) + Math.Pow(wristVectorZ, 2)) * Math.Sqrt(Math.Pow(shoulderVectorY, 2) + Math.Pow(shoulderVectorZ, 2))));
 
                     var angle = Math.Acos(cos) * 180 / Math.PI;
-                    //Console.WriteLine("arccos = " + angle);
 
                     GraphPoint point = new GraphPoint(count, (int)angle);
                     this.UserAngleCollection.Add(point);
+                   
+
+                   
                 }
             }
         }
 
+        /// <summary>
+        /// Windowを閉じたときの処理
+        /// Kinectの初期化を行う
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -168,7 +187,7 @@ namespace FASystem
                 this.colorFrameReader = null;
             }
 
-            //Kinectを停止いて、関連するリソースを放棄する。
+            //Kinectを停止して、関連するリソースを放棄する
             if (this.kinect != null)
             {
                 this.kinect.Close();
@@ -177,6 +196,9 @@ namespace FASystem
         }
 
 
+        /// <summary>
+        /// トレーニング情報を設定するためのウィンドウを表示する
+        /// </summary>
         private void showSettingWindow()
         {
             Window settingWindow = new SettingWindow();
@@ -191,16 +213,17 @@ namespace FASystem
             }
         }
 
+
+        /// <summary>
+        /// グラフ表示部の初期化処理
+        /// </summary>
         public void initChart()
         {
-            Console.WriteLine(this.TrainingInfo.TrainingName);
-            Console.WriteLine(this.TrainingInfo.RangeTrackingTargets.Count);
-            //this.ChartLeft.DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
-
-            // 教則用とユーザーのラインを用意
+            // Init Chart - Data Binding
             this.ChartLeft.Series.First().DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
             this.ChartLeft.Series.Last().DataContext = this.UserAngleCollection;
 
+            // Init Chart Width
             RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
             this.ChartLeft.MaxWidth = ((target.Tempo.DownwardMovementTime + target.Tempo.RestTimeInBottom + target.Tempo.RiseMovementTime + target.Tempo.RestTimeInTop) * 30);
         }

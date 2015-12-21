@@ -16,9 +16,22 @@ namespace FASystem.Model
         public float End { get; set; }
 
 
+        /// <summary>
+        /// 角度範囲の平均値を返す
+        /// </summary>
+        /// <returns></returns>
         public float calcAverage()
         {
             return (Start + End) / 2;
+        }
+
+        /// <summary>
+        /// 角度範囲の値を返す
+        /// </summary>
+        /// <returns></returns>
+        public float getRange()
+        {
+            return Start > End ? Start - End : End - Start;
         }
     }
 }

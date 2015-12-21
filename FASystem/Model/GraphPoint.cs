@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace FASystem.Model
 {
+    /// <summary>
+    /// グラフの点を表すクラス
+    /// </summary>
     public class GraphPoint
     {
         public int X { get; set; }
