@@ -36,6 +36,8 @@ namespace FASystem
         public TrainingInfo TrainingInfo { get; set; }
         private ObservableCollection<GraphPoint> UserAngleCollection { get; set; }
 
+        private int count = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -52,8 +54,12 @@ namespace FASystem
             bodyFrameReader = kinect.BodyFrameSource.OpenReader();
             bodyFrameReader.FrameArrived += bodyFrameReader_FrameArrived;
 
+            
+
+
             this.kinect.Open();
 
+            this.bodies = this.bodies = new Body[kinect.BodyFrameSource.BodyCount];
             this.UserAngleCollection = new ObservableCollection<GraphPoint>();
         }
 
@@ -93,6 +99,16 @@ namespace FASystem
         /* フレームが来る度に呼び出される.距離の単位はメートル.*/
         private void bodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
+            if (this.TrainingInfo == null) return;
+
+            count++;
+
+            if (count == 210)
+            {
+                this.UserAngleCollection.Clear();
+                count = 0;
+            }
+
             using (var bodyFrame = e.FrameReference.AcquireFrame())
             {
                 if (bodyFrame == null)
@@ -113,28 +129,30 @@ namespace FASystem
 
 
                     // 右手首の座標を取得
-                    var rightWristX = body.Joints[JointType.WristRight].Position.X;
-                    var rightWristY = body.Joints[JointType.WristRight].Position.Y;
+                    var rightWristY = body.Joints[JointType.WristRight].Position.Y * 100;
+                    var rightWristZ = body.Joints[JointType.WristRight].Position.Z * 100;
                     // 右肘の座標を取得 （原点 - B )
-                    var rightElbowX = body.Joints[JointType.ElbowRight].Position.X;
-                    var rightElbowY = body.Joints[JointType.ElbowRight].Position.Y;
+                    var rightElbowY = body.Joints[JointType.ElbowRight].Position.Y * 100;
+                    var rightElbowZ = body.Joints[JointType.ElbowRight].Position.Z * 100;
                     // 右肩の座標を取得
-                    var rightShoulderX = body.Joints[JointType.ShoulderRight].Position.X;
-                    var rightShoulderY = body.Joints[JointType.ShoulderRight].Position.Y;
+                    var rightShoulderY = body.Joints[JointType.ShoulderRight].Position.Y * 100;
+                    var rightShoulderZ = body.Joints[JointType.ShoulderRight].Position.Z * 100;
 
-                    var wristVectorX = rightWristX - rightElbowX;
                     var wristVectorY = rightWristY - rightElbowY;
+                    var wristVectorZ = rightWristZ - rightElbowZ;
 
-                    var shoulderVectorX = rightShoulderX - rightElbowX;
                     var shoulderVectorY = rightShoulderY - rightElbowY;
+                    var shoulderVectorZ = rightShoulderZ - rightElbowZ;
 
-                    var cos = (wristVectorX * wristVectorY + shoulderVectorX * shoulderVectorY) / 
-                        ((Math.Sqrt(Math.Pow(wristVectorX,2) + Math.Pow(wristVectorY,2)) * Math.Sqrt(Math.Pow(shoulderVectorX,2) + Math.Pow(shoulderVectorY,2))));
+                    var cos = (wristVectorY * shoulderVectorY + wristVectorZ * shoulderVectorZ) / 
+                        ((Math.Sqrt(Math.Pow(wristVectorY,2) + Math.Pow(wristVectorZ,2)) * Math.Sqrt(Math.Pow(shoulderVectorY,2) + Math.Pow(shoulderVectorZ,2))));
+                    //Console.WriteLine("cos = " + cos);
 
-                    var angle = Math.Acos(cos);
-                    Console.WriteLine(angle);
+                    var angle = Math.Acos(cos) * 180 / Math.PI;
+                    //Console.WriteLine("arccos = " + angle);
 
-                    
+                    GraphPoint point = new GraphPoint(count, (int)angle);
+                    this.UserAngleCollection.Add(point);
                 }
             }
         }
@@ -182,6 +200,9 @@ namespace FASystem
             // 教則用とユーザーのラインを用意
             this.ChartLeft.Series.First().DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
             this.ChartLeft.Series.Last().DataContext = this.UserAngleCollection;
+
+            RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
+            this.ChartLeft.MaxWidth = ((target.Tempo.DownwardMovementTime + target.Tempo.RestTimeInBottom + target.Tempo.RiseMovementTime + target.Tempo.RestTimeInTop) * 30);
         }
     }
 }

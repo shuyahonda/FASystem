@@ -15,16 +15,16 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="100*"/>
             <RowDefinition Height="465*"/>
-            <RowDefinition Height="100*"/>
+            <RowDefinition Height="150*"/>
         </Grid.RowDefinitions>
-        <Canvas x:Name="cameraCanvas" Margin="0,0,0,1" Grid.Row="1"/>
+        <Canvas x:Name="cameraCanvas" Margin="0,0.286,0.286,1.286" Grid.Row="1" Grid.ColumnSpan="2"/>
         <Canvas Grid.ColumnSpan="2" Background="#FF96D788" Margin="0,0,0,1"/>
         <Border BorderThickness="1" Background="#FFAEADAD" BorderBrush="#FFA5A5A5" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,10" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center"/>
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,1,0,0.5" Background="#FFBCB1B1" Grid.Row="2">
-            <sparrow:SparrowChart x:Name="ChartLeft" Margin="0,0,0,0" Grid.Row="1" Width="200" >
+            <sparrow:SparrowChart x:Name="ChartLeft" Margin="0,10,0,0.429" Grid.Row="1" Width="300" >
                 <sparrow:SparrowChart.XAxis>
-                    <sparrow:LinearXAxis MaxValue="210" MinValue="1" ShowCrossLines="True"/>
+                    <sparrow:LinearXAxis MinValue="1" ShowCrossLines="True"/>
                 </sparrow:SparrowChart.XAxis>
                 <sparrow:SparrowChart.YAxis>
                     <sparrow:LinearYAxis MaxValue="200" MinValue="1" />
@@ -32,7 +32,7 @@
                 <sparrow:LineSeries PointsSource="{Binding}" XPath="X" YPath="Y" Stroke="#FF2B33EC" StrokeThickness="2" />
                 <sparrow:LineSeries PointsSource="{Binding}" XPath="X" YPath="Y" Stroke="DarkGreen" StrokeThickness="2" />
             </sparrow:SparrowChart>
-            <sparrow:SparrowChart x:Name="ChartRight" Margin="0,0,0,0" Width="200" >
+            <sparrow:SparrowChart x:Name="ChartRight" Margin="0,10,0,0" Width="200" >
                 <sparrow:SparrowChart.XAxis>
                     <sparrow:LinearXAxis MaxValue="400" MinValue="1" ShowCrossLines="True"/>
                 </sparrow:SparrowChart.XAxis>
@@ -42,7 +42,7 @@
                 <sparrow:LineSeries XPath="Frame" YPath="Coordinate" Stroke="#FF2B33EC" StrokeThickness="2" />
             </sparrow:SparrowChart>
         </StackPanel>
-        <Canvas Grid.Column="1" Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE"/>
+        <Canvas Grid.Column="1" Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden"/>
 
     </Grid>
 </Window>

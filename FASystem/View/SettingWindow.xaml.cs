@@ -1,4 +1,6 @@
 ﻿using FASystem.Model;
+using Microsoft.Kinect;
+using Microsoft.Kinect.Wpf.Controls;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -34,6 +36,9 @@ namespace FASystem
             trainingList.ItemsSource = trainingInfos;
 
             this.loadTrainingInfos();
+
+            KinectRegion.SetKinectRegion(this, kinectRegion);
+            this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
 
         }
           
