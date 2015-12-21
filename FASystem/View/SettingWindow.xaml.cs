@@ -89,7 +89,7 @@ namespace FASystem
             // MainWindosにtrainingInfoを渡したい
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow.TrainingInfo = trainingInfo;
-            mainWindow.initTeachChart();
+            mainWindow.initChart();
             this.Close();
         }
     }

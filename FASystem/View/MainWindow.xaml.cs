@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 using FASystem.Model;
+using System.Collections.ObjectModel;
 
 namespace FASystem
 {
@@ -23,12 +24,17 @@ namespace FASystem
     public partial class MainWindow : Window
     {
         private KinectSensor kinect;
+
         private FrameDescription colorFrameDescription;
         private ColorImageFormat colorImageFormat;
+
         private ColorFrameReader colorFrameReader;
+        private BodyFrameReader bodyFrameReader;
+
+        private Body[] bodies;
 
         public TrainingInfo TrainingInfo { get; set; }
-        //private List<TrainingInfo> trainingList;
+        private ObservableCollection<GraphPoint> UserAngleCollection { get; set; }
 
         public MainWindow()
         {
@@ -43,10 +49,12 @@ namespace FASystem
             this.colorFrameReader = this.kinect.ColorFrameSource.OpenReader();
             this.colorFrameReader.FrameArrived += ColorFrameReader_FrameArrived;
 
+            bodyFrameReader = kinect.BodyFrameSource.OpenReader();
+            bodyFrameReader.FrameArrived += bodyFrameReader_FrameArrived;
+
             this.kinect.Open();
 
-            // this.trainingList = new List<TrainingInfo>();
-
+            this.UserAngleCollection = new ObservableCollection<GraphPoint>();
         }
 
         private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
@@ -82,6 +90,86 @@ namespace FASystem
             colorFrame.Dispose();
         }
 
+        /* フレームが来る度に呼び出される.距離の単位はメートル.*/
+        private void bodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
+        {
+            if (this.isReading == false) return;
+
+            this.frameSkip++;
+            if (this.frameSkip != 6) return;
+            this.frameSkip = 0;
+
+            if (CoordinateWithFrame.Count >= 400)
+            {
+                this.coordinates.X.Clear();
+                this.coordinates.Y.Clear();
+                this.coordinates.Z.Clear();
+                CoordinateWithFrame.initCount();
+                //return;
+            }
+            //this.chartX.XAxis.MinValue = coordinates.X.Count - 70;
+            //this.chartY.XAxis.MinValue = coordinates.Y.Count - 70;
+            //this.chartZ.XAxis.MinValue = coordinates.Z.Count - 70;
+
+            JointType selectedJoint = (JointType)Enum.Parse(typeof(JointType), this.jointsComboBox.SelectedItem.ToString());
+
+            // Collectionにデータを追加する
+            using (var bodyFrame = e.FrameReference.AcquireFrame())
+            {
+                if (bodyFrame == null)
+                {
+                    return;
+                }
+                // ボディデータを取得する
+
+                bodyFrame.GetAndRefreshBodyData(bodies);
+
+                //ボディがトラッキングできている
+                foreach (var body in bodies.Where(b => b.IsTracked))
+                {
+                    CoordinateWithFrame x = new CoordinateWithFrame((double)body.Joints[selectedJoint].Position.X);
+                    CoordinateWithFrame y = new CoordinateWithFrame((double)body.Joints[selectedJoint].Position.Y);
+                    CoordinateWithFrame z = new CoordinateWithFrame((double)body.Joints[selectedJoint].Position.Z);
+                    //Console.WriteLine((double)body.Joints[selectedJoint].Position.Z);
+                    x.countUp();
+                    y.countUp();
+                    z.countUp();
+
+                    /*
+                    if (coordinates.X.Count == 80) coordinates.X.Clear();
+                    if (coordinates.Y.Count == 80) coordinates.Y.Clear();
+                    if (coordinates.Z.Count == 80) coordinates.Z.Clear();
+                      */
+                    /*
+                  if (this.coordinates.X.Count >= 50)
+                  {
+                      Console.WriteLine("100以上");
+                      this.chartX.XAxis.MinValue = (int)this.chartX.XAxis.MaxValue - 50;
+                  }
+                  Console.WriteLine();
+                  */
+
+
+                    this.coordinates.X.Add(x);
+                    this.coordinates.Y.Add(y);
+                    this.coordinates.Z.Add(z);
+
+                    if (body.Joints[selectedJoint].TrackingState == TrackingState.Tracked)
+                    {
+                        setTrackingStateLabelColor(true, false, false);
+                    }
+                    else if (body.Joints[selectedJoint].TrackingState == TrackingState.Inferred)
+                    {
+                        setTrackingStateLabelColor(false, true, false);
+                    }
+                    else if (body.Joints[selectedJoint].TrackingState == TrackingState.NotTracked)
+                    {
+                        setTrackingStateLabelColor(false, false, true);
+                    }
+
+                }
+            }
+        }
 
         protected override void OnClosed(EventArgs e)
         {
@@ -117,11 +205,15 @@ namespace FASystem
             }
         }
 
-        public void initTeachChart()
+        public void initChart()
         {
             Console.WriteLine(this.TrainingInfo.TrainingName);
             Console.WriteLine(this.TrainingInfo.RangeTrackingTargets.Count);
-            this.ChartLeft.DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
+            //this.ChartLeft.DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
+
+            // 教則用とユーザーのラインを用意
+            this.ChartLeft.Series.First().DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
+            this.ChartLeft.Series.Last().DataContext = this.UserAngleCollection;
         }
     }
 }

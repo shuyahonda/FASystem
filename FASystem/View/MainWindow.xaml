@@ -30,6 +30,7 @@
                     <sparrow:LinearYAxis MaxValue="200" MinValue="1" />
                 </sparrow:SparrowChart.YAxis>
                 <sparrow:LineSeries PointsSource="{Binding}" XPath="X" YPath="Y" Stroke="#FF2B33EC" StrokeThickness="2" />
+                <sparrow:LineSeries PointsSource="{Binding}" XPath="X" YPath="Y" Stroke="DarkGreen" StrokeThickness="2" />
             </sparrow:SparrowChart>
             <sparrow:SparrowChart x:Name="ChartRight" Margin="0,0,0,0" Width="200" >
                 <sparrow:SparrowChart.XAxis>
