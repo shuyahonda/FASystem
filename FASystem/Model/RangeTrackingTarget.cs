@@ -54,6 +54,7 @@ namespace FASystem.Model
             return getAllTime() * kinectFPS;
         }
 
+        //TODO: このメソッドは要修正
         public ObservableCollection<GraphPoint> generateBindingGraphCollection()
         {
             ObservableCollection<GraphPoint> collection = new ObservableCollection<GraphPoint>();
