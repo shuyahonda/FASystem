@@ -166,7 +166,7 @@ namespace FASystem
                             var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
                                 ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2,2))));
                             var angle = Math.Acos(cos);
-                            Console.WriteLine("Angle ->" + angle + "°");
+                            Console.WriteLine("CoronalPlane. Angle ->" + Utility.radToPI(angle) + "°");
                         }
                         else if (trackingTarget.PlaneType == Enum.PlaneType.SagittalPlane)
                         {
@@ -179,7 +179,9 @@ namespace FASystem
                             var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
                                 ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
                             var angle = Math.Acos(cos);
-                            Console.WriteLine("Angle ->" + angle + "°");
+                            Console.WriteLine("SagittalPlane. Angle ->" + Utility.radToPI(angle) + "°");
+                            GraphPoint point = new GraphPoint(count, (int)Utility.radToPI(angle));
+                            this.UserAngleCollection.Add(point);
                         }
                         else if (trackingTarget.PlaneType == Enum.PlaneType.TransversePlane)
                         {
@@ -192,7 +194,7 @@ namespace FASystem
                             var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
                                 ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
                             var angle = Math.Acos(cos);
-                            Console.WriteLine("Angle ->" + angle + "°");
+                            Console.WriteLine("Angle ->" + Utility.radToPI(angle) + "°");
                         }
                     
                         /*
