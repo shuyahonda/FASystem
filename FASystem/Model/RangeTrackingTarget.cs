@@ -15,59 +15,62 @@ namespace FASystem.Model
         private const int kinectFPS = 30;
 
         /// <summary>
-        /// 
+        /// 単位ベクトルを用いるかどうかのフラグ。
+        /// トレーニングの種類によってはベクトルが必ず関節になるとは限らないため。
         /// </summary>
         public Boolean isUseUnitVector { get; set; }
 
         /// <summary>
-        /// 
+        /// テンポを管理するかどうかのフラグ。
+        /// 角度だけをアノテーションで表示する場合はFalseにする。
         /// </summary>
         public Boolean isManageTempo { get; set; }
    
         /// <summary>
-        /// 
+        /// テンポに関する情報
         /// </summary>
         [JsonProperty("tempo")]
         public Tempo Tempo { get; set; }
 
         /// <summary>
-        /// 
+        /// 挙上動作時の適切な関節範囲
         /// </summary>
         [JsonProperty("permissibleRangeInTop")]
         public AngleRange PermissibleRangeInTop { get; set; }
 
         /// <summary>
-        /// 
+        /// 下降動作時の適切な関節範囲
         /// </summary>
         [JsonProperty("permissibleRangeInBottom")]
         public AngleRange PermissibleRangeInBottom { get; set; }
 
         /// <summary>
-        /// 
+        /// 挙上動作時の不適切な関節範囲
         /// </summary>
         [JsonProperty("prohibitedRangeInTop")]
         public AngleRange ProhibitedRangeInTop { get; set; }
 
         /// <summary>
-        /// 
+        /// 下降動作時の不適切な関節範囲
         /// </summary>
         [JsonProperty("prohibitedRangeInBottom")]
         public AngleRange ProhibitedRangeInBottom { get; set; }
 
         /// <summary>
-        /// 
+        /// どの面から見た角度を求めるか決定するための列挙型
         /// </summary>
         [JsonProperty("planeType")]
         public PlaneType PlaneType { get; set; }
 
         /// <summary>
-        /// 
+        /// 原点とする関節
         /// </summary>
         [JsonProperty("origin")]
         public JointType Origin { get; set; }
 
         /// <summary>
-        /// 
+        /// ベクトルとする関節
+        /// 1つ又は2つの関節を保持する
         /// </summary>
         [JsonProperty("vector")]
         public List<JointType> Vector { get; set; }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FASystem"
         xmlns:sparrow="http://sparrowtoolkit.codeplex.com/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="400" ContentRendered="Window_ContentRendered">
+        Title="MainWindow" Height="900" Width="600" ContentRendered="Window_ContentRendered">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="58*"/>
@@ -21,8 +21,8 @@
         <Canvas Grid.ColumnSpan="2" Background="#FF96D788" Margin="0,0,0,1"/>
         <Border BorderThickness="1" Background="#FFAEADAD" BorderBrush="#FFA5A5A5" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,10" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center"/>
-        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,1,0,0.5" Background="#FFBCB1B1" Grid.Row="2">
-            <sparrow:SparrowChart x:Name="ChartLeft" Margin="0,10,0,0.429" Grid.Row="1" Width="300" >
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,1,0,0.5" Background="#FFD2C2C2" Grid.Row="2">
+            <sparrow:SparrowChart x:Name="ChartLeft" Margin="0,10,0,0.429" Grid.Row="1" Width="300" Foreground="Black" >
                 <sparrow:SparrowChart.XAxis>
                     <sparrow:LinearXAxis MinValue="1" ShowCrossLines="True"/>
                 </sparrow:SparrowChart.XAxis>

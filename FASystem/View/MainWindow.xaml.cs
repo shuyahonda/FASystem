@@ -137,7 +137,8 @@ namespace FASystem
 
                     // テスト用に右肘を原点、右手首と右肩をベクトルとして角度を求める
                     // 角度を求めて,UserAngleCollectionへAdd
-                  
+
+                    
                     // 右手首の座標を取得
                     var rightWristY = body.Joints[JointType.WristRight].Position.Y * 100;
                     var rightWristZ = body.Joints[JointType.WristRight].Position.Z * 100;
@@ -158,7 +159,7 @@ namespace FASystem
                         ((Math.Sqrt(Math.Pow(wristVectorY, 2) + Math.Pow(wristVectorZ, 2)) * Math.Sqrt(Math.Pow(shoulderVectorY, 2) + Math.Pow(shoulderVectorZ, 2))));
 
                     var angle = Utility.radToPI(Math.Acos(cos));
-
+                    
                     GraphPoint point = new GraphPoint(count, (int)angle);
                     this.UserAngleCollection.Add(point);
                 }
@@ -222,7 +223,7 @@ namespace FASystem
 
             // Init Chart Widthdd
             RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
-            this.ChartLeft.MaxWidth = ((target.Tempo.DownwardMovementTime + target.Tempo.RestTimeInBottom + target.Tempo.RiseMovementTime + target.Tempo.RestTimeInTop) * 30);
+            this.ChartLeft.MaxWidth = target.Tempo.getAllFrame();
         }
     }
 }

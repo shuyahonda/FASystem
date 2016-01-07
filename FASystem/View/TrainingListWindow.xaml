@@ -11,7 +11,7 @@
     <Grid>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="トレーニングを選択してください" VerticalAlignment="Top"/>
         <k:KinectRegion Name="kinectRegion" Width="250" Height="200">
-        <ListBox x:Name="trainingList" Margin="10,40,10,10.5" DisplayMemberPath="TrainingName" SelectionChanged="trainingList_SelectionChanged"/>
+        <ListBox x:Name="trainingList" Margin="10,40,10,10.5" DisplayMemberPath="TrainingName" SelectionChanged="trainingList_SelectionChanged" FontSize="21.333"/>
         </k:KinectRegion>
 
     </Grid>
