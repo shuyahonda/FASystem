@@ -14,52 +14,73 @@ namespace FASystem.Model
     {
         private const int kinectFPS = 30;
 
-        public Boolean isUserUnitVector { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean isUseUnitVector { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Boolean isManageTempo { get; set; }
    
+        /// <summary>
+        /// 
+        /// </summary>
         [JsonProperty("tempo")]
         public Tempo Tempo { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [JsonProperty("permissibleRangeInTop")]
         public AngleRange PermissibleRangeInTop { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [JsonProperty("permissibleRangeInBottom")]
         public AngleRange PermissibleRangeInBottom { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [JsonProperty("prohibitedRangeInTop")]
         public AngleRange ProhibitedRangeInTop { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [JsonProperty("prohibitedRangeInBottom")]
         public AngleRange ProhibitedRangeInBottom { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [JsonProperty("planeType")]
         public PlaneType PlaneType { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [JsonProperty("origin")]
         public JointType Origin { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [JsonProperty("vector")]
         public List<JointType> Vector { get; set; }
 
-
-
-
-        public float getAllTime()
-        {
-            return Tempo.RestTimeInBottom + Tempo.RestTimeInTop + Tempo.DownwardMovementTime + Tempo.RiseMovementTime;
-        }
-
-        public float getXRange()
-        {
-            return getAllTime() * kinectFPS;
-        }
-
-        //TODO: このメソッドは要修正
+        /// <summary>
+        /// 教則グラフ生成用のコレクションを返す
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<GraphPoint> generateBindingGraphCollection()
         {
             ObservableCollection<GraphPoint> collection = new ObservableCollection<GraphPoint>();
 
-            int XRange = (int)this.getXRange();
+            int XRange = (int)this.Tempo.getAllFrame();
 
             for (int x = 0; x < XRange; x++)
             {

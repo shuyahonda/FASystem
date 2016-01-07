@@ -19,8 +19,8 @@
         },
 
         "permissibleRangeInTop": {
-          "start": 30,
-          "end": 40
+          "start": 40,
+          "end": 50
         },
 
         "prohibitedRangeInTop": {
@@ -30,9 +30,9 @@
 
         "tempo": {
           "restTimeInBottom": 1.0,
-          "restTimeInTop": 1.0,
+          "restTimeInTop": 0.5,
           "downwardMovementTime": 3.0,
-          "riseMovementTime": 2.0
+          "riseMovementTime": 1.0
         }
       }
     ],
