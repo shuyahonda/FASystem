@@ -1,49 +1,48 @@
 ﻿{
-  "trainingName": "TestTraining",
+  "trainingName": "TestTraining(arm-curl[right])",
 
 
-  "rangeTrackingTargets": 
-    [
-      {
-        "isUseUnitVector": true,
-        "isManageTempo": true,
+  "rangeTrackingTargets": [
+    {
+      "isUseUnitVector": false, 
+      "isManageTempo": true,
 
-        "permissibleRangeInBottom": {
-          "start": 170,
-          "end": 160
-        },
+      "permissibleRangeInBottom": {
+        "start": 170,
+        "end": 160
+      },
 
-        "prohibitedRangeInBottom": {
-          "end": 171,
-          "start": 180
-        },
+      "prohibitedRangeInBottom": {
+        "end": 171,
+        "start": 180
+      },
 
-        "permissibleRangeInTop": {
-          "start": 40,
-          "end": 50
-        },
+      "permissibleRangeInTop": {
+        "start": 40,
+        "end": 50
+      },
 
-        "prohibitedRangeInTop": {
-          "start": 10,
-          "end": 20
-        },
+      "prohibitedRangeInTop": {
+        "start": 10,
+        "end": 20
+      },
 
-        "tempo": {
-          "restTimeInBottom": 1.0,
-          "restTimeInTop": 0.5,
-          "downwardMovementTime": 3.0,
-          "riseMovementTime": 1.0
-        }
-      }
-    ],
+      "tempo": {
+        "restTimeInBottom": 1.0,
+        "restTimeInTop": 0.5,
+        "downwardMovementTime": 3.0,
+        "riseMovementTime": 1.0
+      },
 
-    "planeType": "SagittalPlane",
-    "origin": "AnkleLeft",
-    "vector": [
-      { "jointType": "ElbowRight" },
-      { "jointType": "ElbowRight" }
-    ],
-  
+      "planeType": "SagittalPlane",
+      "origin": "ElbowRight",
+      "vector": [
+        "ShoulderRight",
+        "WristRight" 
+      ]
+    }
+
+  ],
 
   "fixTrackingTarget": {
 
@@ -51,9 +50,9 @@
     "fixType": "UpAndDownFix",
     
     "targetJoint": [
-      { "jointType": "AnkleLeft" },
-      { "jointType": "Head" },
-      { "jointType": "SpineBase" }
+      "AnkleLeft",
+      "Head",
+      "SpineBase"
     ]
   }
 }
