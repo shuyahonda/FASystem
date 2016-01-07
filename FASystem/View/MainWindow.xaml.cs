@@ -134,7 +134,6 @@ namespace FASystem
                 foreach (var body in bodies.Where(b => b.IsTracked))
                 {
                     // TrainingInfoを利用して原点と２つのベクトルから角度を求める
-<<<<<<< HEAD
                     foreach (var trackingTarget in this.TrainingInfo.RangeTrackingTargets)
                     {
                         CameraSpacePoint origin = new CameraSpacePoint();
@@ -225,36 +224,14 @@ namespace FASystem
                         */
 
                     }
-=======
 
-                    // テスト用に右肘を原点、右手首と右肩をベクトルとして角度を求める
-                    // 角度を求めて,UserAngleCollectionへAdd
-
-                    
-                    // 右手首の座標を取得
-                    var rightWristY = body.Joints[JointType.WristRight].Position.Y * 100;
-                    var rightWristZ = body.Joints[JointType.WristRight].Position.Z * 100;
-                    // 右肘の座標を取得 （原点 - B )
-                    var rightElbowY = body.Joints[JointType.ElbowRight].Position.Y * 100;
-                    var rightElbowZ = body.Joints[JointType.ElbowRight].Position.Z * 100;
-                    // 右肩の座標を取得
-                    var rightShoulderY = body.Joints[JointType.ShoulderRight].Position.Y * 100;
-                    var rightShoulderZ = body.Joints[JointType.ShoulderRight].Position.Z * 100;
-
-                    var wristVectorY = rightWristY - rightElbowY;
-                    var wristVectorZ = rightWristZ - rightElbowZ;
-
-                    var shoulderVectorY = rightShoulderY - rightElbowY;
-                    var shoulderVectorZ = rightShoulderZ - rightElbowZ;
-
-                    var cos = (wristVectorY * shoulderVectorY + wristVectorZ * shoulderVectorZ) /
-                        ((Math.Sqrt(Math.Pow(wristVectorY, 2) + Math.Pow(wristVectorZ, 2)) * Math.Sqrt(Math.Pow(shoulderVectorY, 2) + Math.Pow(shoulderVectorZ, 2))));
-
+                   
+                    /*
                     var angle = Utility.radToPI(Math.Acos(cos));
                     
                     GraphPoint point = new GraphPoint(count, (int)angle);
                     this.UserAngleCollection.Add(point);
->>>>>>> f45955aeba5b585f5f03fd1f34752f94bbb33584
+                    */
                 }
             }
         }
