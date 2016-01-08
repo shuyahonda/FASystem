@@ -211,9 +211,9 @@ namespace FASystem
                             case PlaneType.SagittalPlane:
                                 // Y,Z
                                 vector1.X = position1.Y - origin.Y;
-                                vector2.Y = position1.Z - origin.Z;
+                                vector1.Y = position1.Z - origin.Z;
                                 vector2.X = position2.Y - origin.Y;
-                                vector2.Y = position2.Z - origin.Z;
+                                vector2.Y= position2.Z - origin.Z;
 
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
@@ -228,7 +228,7 @@ namespace FASystem
                             case PlaneType.TransversePlane:
                                 // X,Z
                                 vector1.X = position1.Y - origin.Y;
-                                vector2.Y = position1.Z - origin.Z;
+                                vector1.Y = position1.Z - origin.Z;
                                 vector2.X = position2.Y - origin.Y;
                                 vector2.Y = position2.Z - origin.Z;
 
