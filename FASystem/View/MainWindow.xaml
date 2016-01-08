@@ -20,18 +20,19 @@
         </Grid.RowDefinitions>
         <Canvas x:Name="cameraCanvas" Margin="0,0.286,1.286,1.571" Grid.Row="1" Grid.ColumnSpan="2"/>
         <Canvas Background="#FF96D788" Margin="0,0,1.286,0.714" Grid.ColumnSpan="2">
-            <Button x:Name="button1" Content="設定" Canvas.Left="500" Canvas.Top="70" Width="83" Height="41"/>
+            <Button x:Name="button1" Content="設定" Canvas.Left="502" Canvas.Top="785" Width="83" Height="41"/>
         </Canvas>
         <Border BorderThickness="1" Background="#FFAEADAD" BorderBrush="#FFA5A5A5" Height="1" VerticalAlignment="Bottom" Margin="0,0,1.286,566.571" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,40,0.429,39.714" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center" Height="42"/>
-        <StackPanel Orientation="Horizontal" Margin="0,1.429,1.286,0.429" Background="#FFD2C2C2" Grid.Row="2" Grid.ColumnSpan="2"/>
         <Canvas Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden" Margin="14,0.286,11.429,182.429" Grid.RowSpan="2"/>
-        <Button x:Name="trainingSelectButton" Content="トレーニング選択" Margin="4.571,17,6.286,61.714" Grid.Column="1" Click="trainingSelectButton_Click"/>
-        <d3:ChartPlotter x:Name="plotter" Margin="0,0.5,1,1.5" Grid.Row="2" Grid.ColumnSpan="2" Background="#FFE3E3E3">
+        <d3:ChartPlotter x:Name="plotter" Margin="0,0.5,11,1.5" Grid.Row="2" Background="#FFE3E3E3">
             <d3:Header FontFamily="Arial"/>
             <d3:VerticalAxisTitle FontFamily="Arial" Content="angle"/>
             <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
         </d3:ChartPlotter>
+        <GroupBox x:Name="groupBox" Header="GroupBox" HorizontalAlignment="Left" Margin="0,10.5,0,17.5" Width="92" Grid.Column="1" Grid.Row="2">
+            <Button x:Name="trainingSelectButton" Content="トレーニング選択" Margin="-6,3,-2,72" Click="trainingSelectButton_Click"/>
+        </GroupBox>
 
     </Grid>
 </Window>
