@@ -13,7 +13,7 @@ namespace FASystem.Helper
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public static double radToPI(double num)
+        public static double radToDegree(double num)
         {
             return num * 180 / Math.PI;
         }

@@ -5,10 +5,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 using FASystem.Model;
+using FASystem.Enum;
 using System.Collections.ObjectModel;
 using FASystem.Helper;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay;
+using FASystem.View;
 
 namespace FASystem
 {
@@ -176,87 +178,57 @@ namespace FASystem
                      
                         }
 
-                        if (trackingTarget.PlaneType == Enum.PlaneType.CoronalPlane)
+                        switch (trackingTarget.PlaneType)
                         {
-                            // use X,Y
-                            var vectorX1 = position1.X - origin.X;
-                            var vectorY1 = position1.Y - origin.Y;
-                            var vectorX2 = position2.X - origin.X;
-                            var vectorY2 = position2.Y - origin.Y;
+                            case PlaneType.CoronalPlane:
 
-                            var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
-                                ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2,2))));
-                            var angle = Math.Acos(cos);
-                            Console.WriteLine("CoronalPlane. Angle ->" + Utility.radToPI(angle) + "°");
+                                var vectorX1 = position1.X - origin.X;
+                                var vectorY1 = position1.Y - origin.Y;
+                                var vectorX2 = position2.X - origin.X;
+                                var vectorY2 = position2.Y - origin.Y;
+
+                                var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
+                                    ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
+                                var angle = Math.Acos(cos);
+                                Console.WriteLine("CoronalPlane. Angle ->" + Utility.radToDegree(angle) + "°");
+
+                                break;
+                            case PlaneType.SagittalPlane:
+
+                                // use Y,Z
+                                var vectorY1 = position1.Y - origin.Y;
+                                var vectorZ1 = position1.Z - origin.Z;
+                                var vectorY2 = position2.Y - origin.Y;
+                                var vectorZ2 = position2.Z - origin.Z;
+
+                                var cos = (vectorY1 * vectorY2 + vectorZ1 * vectorZ2) /
+                                    ((Math.Sqrt(Math.Pow(vectorY1, 2) + Math.Pow(vectorZ1, 2)) * Math.Sqrt(Math.Pow(vectorY2, 2) + Math.Pow(vectorZ2, 2))));
+                                var angle = Math.Acos(cos);
+                                Console.WriteLine("SagittalPlane. Angle ->" + Utility.radToDegree(angle) + "°");
+                                GraphPoint point = new GraphPoint(count, (int)Utility.radToDegree(angle));
+                                this.UserAngleCollection.Add(point);
+
+                                break;
+                            case PlaneType.TransversePlane:
+
+                                // use X,Z
+                                var vectorX1 = position1.X - origin.X;
+                                var vectorY1 = position1.Z - origin.Z;
+                                var vectorX2 = position2.X - origin.X;
+                                var vectorY2 = position2.Z - origin.Z;
+
+                                var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
+                                    ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
+
+                                var angle = Math.Acos(cos);
+
+                                Console.WriteLine("Angle ->" + Utility.radToDegree(angle) + "°");
+
+                                break;
+                            default:
+                                break;
                         }
-                        else if (trackingTarget.PlaneType == Enum.PlaneType.SagittalPlane)
-                        {
-                            // use Y,Z
-                            var vectorY1 = position1.Y - origin.Y;
-                            var vectorZ1 = position1.Z - origin.Z;
-                            var vectorY2 = position2.Y - origin.Y;
-                            var vectorZ2 = position2.Z - origin.Z;
-
-                            var cos = (vectorY1 * vectorY2 + vectorZ1 * vectorZ2) /
-                                ((Math.Sqrt(Math.Pow(vectorY1, 2) + Math.Pow(vectorZ1, 2)) * Math.Sqrt(Math.Pow(vectorY2, 2) + Math.Pow(vectorZ2, 2))));
-                            var angle = Math.Acos(cos);
-                            Console.WriteLine("SagittalPlane. Angle ->" + Utility.radToPI(angle) + "°");
-                            GraphPoint point = new GraphPoint(count, (int)Utility.radToPI(angle));
-                            this.UserAngleCollection.Add(point);
-                        }
-                        else if (trackingTarget.PlaneType == Enum.PlaneType.TransversePlane)
-                        {
-                            // use X,Z
-                            var vectorX1 = position1.X - origin.X;
-                            var vectorY1 = position1.Z - origin.Z;
-                            var vectorX2 = position2.X - origin.X;
-                            var vectorY2 = position2.Z - origin.Z;
-
-                            var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
-                                ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
-
-                            var angle = Math.Acos(cos);
-
-                            Console.WriteLine("Angle ->" + Utility.radToPI(angle) + "°");
-                        }
-                    
-                        /*
-                        // テスト用に右肘を原点、右手首と右肩をベクトルとして角度を求める
-                        // 角度を求めて,UserAngleCollectionへAdd
-
-
-                        // 右手首の座標を取得
-                        var rightWristX = body.Joints[JointType.WristRight].Position.X;
-                        var rightWristY = body.Joints[JointType.WristRight].Position.Y;
-                        // 右肘の座標を取得 （原点 - B )
-                        var rightElbowX = body.Joints[JointType.ElbowRight].Position.X;
-                        var rightElbowY = body.Joints[JointType.ElbowRight].Position.Y;
-                        // 右肩の座標を取得
-                        var rightShoulderX = body.Joints[JointType.ShoulderRight].Position.X;
-                        var rightShoulderY = body.Joints[JointType.ShoulderRight].Position.Y;
-
-                        var wristVectorX = rightWristX - rightElbowX;
-                        var wristVectorY = rightWristY - rightElbowY;
-
-                        var shoulderVectorX = rightShoulderX - rightElbowX;
-                        var shoulderVectorY = rightShoulderY - rightElbowY;
-
-                        var cos = (wristVectorX * wristVectorY + shoulderVectorX * shoulderVectorY) /
-                            ((Math.Sqrt(Math.Pow(wristVectorX, 2) + Math.Pow(wristVectorY, 2)) * Math.Sqrt(Math.Pow(shoulderVectorX, 2) + Math.Pow(shoulderVectorY, 2))));
-
-                        var angle = Math.Acos(cos);
-                        Console.WriteLine(angle);
-                        */
-
                     }
-
-                   
-                    /*
-                    var angle = Utility.radToPI(Math.Acos(cos));
-                    
-                    GraphPoint point = new GraphPoint(count, (int)angle);
-                    this.UserAngleCollection.Add(point);
-                    */
                 }
             }
         }
@@ -295,6 +267,15 @@ namespace FASystem
         }
 
         /// <summary>
+        /// 設定ウィンドウを表示する
+        /// </summary>
+        private void showSettingWindow()
+        {
+            Window settingWindow = new SettingWindow();
+            settingWindow.Show();
+        }
+
+        /// <summary>
         /// Windowが描画されたときに呼ばれる
         /// </summary>
         /// <param name="sender"></param>
@@ -313,8 +294,6 @@ namespace FASystem
         public void initChart()
         {
             // Init Chart - Data Binding
-            //this.ChartLeft.Series.First().DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
-            //this.ChartLeft.Series.Last().DataContext = this.UserAngleCollection;
             var teachSeries = new EnumerableDataSource<GraphPoint>(this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection());
             teachSeries.SetXMapping(x => x.X);
             teachSeries.SetYMapping(y => y.Y);
@@ -326,7 +305,7 @@ namespace FASystem
             plotter.AddLineGraph(userAngleSeries, Colors.Green, 2);
 
 
-            // Init Chart Widthdd
+            // Init Chart Width
             RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
             //this.ChartLeft.MaxWidth = target.Tempo.getAllFrame();
         }
@@ -334,6 +313,16 @@ namespace FASystem
         private void trainingSelectButton_Click(object sender, RoutedEventArgs e)
         {
             this.showTrainingSelectWindow();
+        }
+
+        private void cropBitmap()
+        {
+
+        }
+
+        private void settingButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.showSettingWindow();
         }
     }
 }
