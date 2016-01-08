@@ -55,6 +55,12 @@ namespace FASystem
 
             // Init Kinect Sensors
             this.kinect = KinectSensor.GetDefault();
+
+            if (this.kinect == null)
+            {
+                this.showCloseDialog("Kinectが接続されていません。アプリケーションを終了します。");
+            }
+
             this.colorImageFormat = ColorImageFormat.Bgra;
             this.colorFrameDescription = this.kinect.ColorFrameSource.CreateFrameDescription(this.colorImageFormat);
             this.colorFrameReader = this.kinect.ColorFrameSource.OpenReader();
@@ -75,7 +81,7 @@ namespace FASystem
         /// <param name="e"></param>
         private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
-         
+
             ColorFrame colorFrame = e.FrameReference.AcquireFrame();
 
             // フレームが上手く取得出来ない場合がある。
@@ -102,22 +108,22 @@ namespace FASystem
             //リサイズ
             //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / bitmapSource.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
             //TransformedBitmap tbBitmap = new TransformedBitmap(bitmapSource, scale);
-            /*
-            CroppedBitmap croppedBitmap = new CroppedBitmap(bitmapSource,new Int32Rect(this.colorFrameDescription.Width / 2 - this.colorFrameDescription.Width / 2,
+
+            CroppedBitmap croppedBitmap = new CroppedBitmap(bitmapSource, new Int32Rect(this.colorFrameDescription.Width / 2 - this.colorFrameDescription.Width / 2,
                                                                                        this.colorFrameDescription.Height / 2 - this.colorFrameDescription.Height / 2,
                                                                                        (int)this.cameraCanvas.ActualWidth,
                                                                                        (int)this.cameraCanvas.ActualHeight));
-            
+
             //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / croppedBitmap.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
 
-            */
+
 
             Console.WriteLine(this.cameraCanvas.ActualWidth);
             Console.WriteLine(this.cameraCanvas.ActualHeight);
 
             //キャンバスに表示する
             //this.cameraCanvas.Background = new ImageBrush(bitmapSource);
-            this.cameraCanvas.Background = new ImageBrush(bitmapSource);
+            this.cameraCanvas.Background = new ImageBrush(croppedBitmap);
 
             //取得したフレームを放棄する
             colorFrame.Dispose();
@@ -154,7 +160,6 @@ namespace FASystem
                 //ボディがトラッキングできている
                 foreach (var body in bodies.Where(b => b.IsTracked))
                 {
-
                     // TrainingInfoを利用して原点と２つのベクトルから角度を求める
                     foreach (var trackingTarget in this.TrainingInfo.RangeTrackingTargets)
                     {
@@ -175,13 +180,13 @@ namespace FASystem
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
                             position2 = body.Joints[trackingTarget.Vector[1]].Position;
 
-                     
+
                         }
 
                         switch (trackingTarget.PlaneType)
                         {
                             case PlaneType.CoronalPlane:
-
+                                // X,Y
                                 var vectorX1 = position1.X - origin.X;
                                 var vectorY1 = position1.Y - origin.Y;
                                 var vectorX2 = position2.X - origin.X;
@@ -190,12 +195,15 @@ namespace FASystem
                                 var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
                                     ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
                                 var angle = Math.Acos(cos);
-                                Console.WriteLine("CoronalPlane. Angle ->" + Utility.radToDegree(angle) + "°");
+
+#if DEBUG 
+                                Console.WriteLine("CoronalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
+#endif
 
                                 break;
                             case PlaneType.SagittalPlane:
-
-                                // use Y,Z
+                                /*
+                                // Y,Z
                                 var vectorY1 = position1.Y - origin.Y;
                                 var vectorZ1 = position1.Z - origin.Z;
                                 var vectorY2 = position2.Y - origin.Y;
@@ -204,14 +212,16 @@ namespace FASystem
                                 var cos = (vectorY1 * vectorY2 + vectorZ1 * vectorZ2) /
                                     ((Math.Sqrt(Math.Pow(vectorY1, 2) + Math.Pow(vectorZ1, 2)) * Math.Sqrt(Math.Pow(vectorY2, 2) + Math.Pow(vectorZ2, 2))));
                                 var angle = Math.Acos(cos);
-                                Console.WriteLine("SagittalPlane. Angle ->" + Utility.radToDegree(angle) + "°");
                                 GraphPoint point = new GraphPoint(count, (int)Utility.radToDegree(angle));
                                 this.UserAngleCollection.Add(point);
-
+#if DEBUG
+                                Console.WriteLine("SagittalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
+#endif
+                                */
                                 break;
                             case PlaneType.TransversePlane:
-
-                                // use X,Z
+                                /*
+                                // X,Z
                                 var vectorX1 = position1.X - origin.X;
                                 var vectorY1 = position1.Z - origin.Z;
                                 var vectorX2 = position2.X - origin.X;
@@ -222,8 +232,10 @@ namespace FASystem
 
                                 var angle = Math.Acos(cos);
 
-                                Console.WriteLine("Angle ->" + Utility.radToDegree(angle) + "°");
-
+#if DEBUG
+                                Console.WriteLine("TransversePlane...Angle ->" + Utility.radToDegree(angle) + "°");
+#endif
+                                */
                                 break;
                             default:
                                 break;
@@ -294,6 +306,8 @@ namespace FASystem
         public void initChart()
         {
             // Init Chart - Data Binding
+            plotter.Children.RemoveAll((typeof(LineGraph)));
+            
             var teachSeries = new EnumerableDataSource<GraphPoint>(this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection());
             teachSeries.SetXMapping(x => x.X);
             teachSeries.SetYMapping(y => y.Y);
@@ -305,9 +319,9 @@ namespace FASystem
             plotter.AddLineGraph(userAngleSeries, Colors.Green, 2);
 
 
-            // Init Chart Width
+            // Init Chart - Height
             RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
-            //this.ChartLeft.MaxWidth = target.Tempo.getAllFrame();
+            this.setYAxisRange((int)target.PermissibleRangeInTop.calcAverage() - 20, (int)target.PermissibleRangeInBottom.calcAverage() + 20);
         }
 
         private void trainingSelectButton_Click(object sender, RoutedEventArgs e)
@@ -323,6 +337,27 @@ namespace FASystem
         private void settingButton_Click(object sender, RoutedEventArgs e)
         {
             this.showSettingWindow();
+        }
+
+        private void showCloseDialog(string message)
+        {
+            Console.WriteLine("showCloseDialog");
+            string caption = "";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBox.Show(message, caption, button, icon);
+        }
+
+        /// <summary>
+        /// ChartのY軸を固定する
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        private void setYAxisRange(int min, int max)
+        {
+            ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
+            restr.YRange = new DisplayRange(min, max);
+            plotter.Viewport.Restrictions.Add(restr);
         }
     }
 }

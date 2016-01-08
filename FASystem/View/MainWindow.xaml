@@ -26,8 +26,6 @@
                 <d3:Header FontFamily="Arial"/>
                 <d3:VerticalAxisTitle FontFamily="Arial" Content="angle"/>
                 <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
-                <d3:HorizontalLine Value="{Binding }" Stroke="Red" StrokeThickness="2" />
-
             </d3:ChartPlotter>
         </StackPanel>
         <Canvas Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden" Margin="14,0.286,11.429,182.429" Grid.RowSpan="2"/>

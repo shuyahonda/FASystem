@@ -97,6 +97,7 @@
     <Compile Include="View\TrainingListWindow.xaml.cs">
       <DependentUpon>TrainingListWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\ViewportAxesRangeRestriction.cs" />
     <Page Include="Dictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -160,7 +161,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Extension\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
