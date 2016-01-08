@@ -37,8 +37,8 @@
       "planeType": "SagittalPlane",
       "origin": "ElbowRight",
       "vector": [
-        "ShoulderRight",
-        "WristRight" 
+        "WristRight",
+        "ShoulderRight"
       ]
     }
 

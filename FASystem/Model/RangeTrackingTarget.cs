@@ -79,9 +79,9 @@ namespace FASystem.Model
         /// 教則グラフ生成用のコレクションを返す
         /// </summary>
         /// <returns></returns>
-        public ObservableCollection<GraphPoint> generateBindingGraphCollection()
+        public List<GraphPoint> generateBindingGraphCollection()
         {
-            ObservableCollection<GraphPoint> collection = new ObservableCollection<GraphPoint>();
+            List<GraphPoint> collection = new List<GraphPoint>();
 
             int XRange = (int)this.Tempo.getAllFrame();
 

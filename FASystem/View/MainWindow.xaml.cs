@@ -7,6 +7,8 @@ using Microsoft.Kinect;
 using FASystem.Model;
 using System.Collections.ObjectModel;
 using FASystem.Helper;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Microsoft.Research.DynamicDataDisplay;
 
 namespace FASystem
 {
@@ -38,7 +40,7 @@ namespace FASystem
         private ObservableCollection<GraphPoint> UserAngleCollection { get; set; }
 
         /// <summary>
-        /// こいつは別のところで管理したい
+        /// フレームカウント
         /// </summary>
         private int count = 0;
 
@@ -95,7 +97,24 @@ namespace FASystem
                                                             colors,
                                                             this.colorFrameDescription.Width * (int)this.colorFrameDescription.BytesPerPixel);
 
+            //リサイズ
+            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / bitmapSource.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
+            //TransformedBitmap tbBitmap = new TransformedBitmap(bitmapSource, scale);
+            /*
+            CroppedBitmap croppedBitmap = new CroppedBitmap(bitmapSource,new Int32Rect(this.colorFrameDescription.Width / 2 - this.colorFrameDescription.Width / 2,
+                                                                                       this.colorFrameDescription.Height / 2 - this.colorFrameDescription.Height / 2,
+                                                                                       (int)this.cameraCanvas.ActualWidth,
+                                                                                       (int)this.cameraCanvas.ActualHeight));
+            
+            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / croppedBitmap.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
+
+            */
+
+            Console.WriteLine(this.cameraCanvas.ActualWidth);
+            Console.WriteLine(this.cameraCanvas.ActualHeight);
+
             //キャンバスに表示する
+            //this.cameraCanvas.Background = new ImageBrush(bitmapSource);
             this.cameraCanvas.Background = new ImageBrush(bitmapSource);
 
             //取得したフレームを放棄する
@@ -114,7 +133,7 @@ namespace FASystem
 
             count++;
 
-            if (count == 210)
+            if (count == this.TrainingInfo.RangeTrackingTargets.First().Tempo.getAllFrame())
             {
                 this.UserAngleCollection.Clear();
                 count = 0;
@@ -133,6 +152,7 @@ namespace FASystem
                 //ボディがトラッキングできている
                 foreach (var body in bodies.Where(b => b.IsTracked))
                 {
+
                     // TrainingInfoを利用して原点と２つのベクトルから角度を求める
                     foreach (var trackingTarget in this.TrainingInfo.RangeTrackingTargets)
                     {
@@ -146,13 +166,14 @@ namespace FASystem
                             origin = body.Joints[trackingTarget.Origin].Position;
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
                             position2 = body.Joints[trackingTarget.Vector[1]].Position;
-
                         }
                         else if (trackingTarget.Vector.Count == 2)
                         {
                             origin = body.Joints[trackingTarget.Origin].Position;
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
                             position2 = body.Joints[trackingTarget.Vector[1]].Position;
+
+                     
                         }
 
                         if (trackingTarget.PlaneType == Enum.PlaneType.CoronalPlane)
@@ -171,13 +192,13 @@ namespace FASystem
                         else if (trackingTarget.PlaneType == Enum.PlaneType.SagittalPlane)
                         {
                             // use Y,Z
-                            var vectorX1 = position1.Y - origin.Y;
-                            var vectorY1 = position1.Z - origin.Z;
-                            var vectorX2 = position2.Y - origin.Y;
-                            var vectorY2 = position2.Z - origin.Z;
+                            var vectorY1 = position1.Y - origin.Y;
+                            var vectorZ1 = position1.Z - origin.Z;
+                            var vectorY2 = position2.Y - origin.Y;
+                            var vectorZ2 = position2.Z - origin.Z;
 
-                            var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
-                                ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
+                            var cos = (vectorY1 * vectorY2 + vectorZ1 * vectorZ2) /
+                                ((Math.Sqrt(Math.Pow(vectorY1, 2) + Math.Pow(vectorZ1, 2)) * Math.Sqrt(Math.Pow(vectorY2, 2) + Math.Pow(vectorZ2, 2))));
                             var angle = Math.Acos(cos);
                             Console.WriteLine("SagittalPlane. Angle ->" + Utility.radToPI(angle) + "°");
                             GraphPoint point = new GraphPoint(count, (int)Utility.radToPI(angle));
@@ -193,7 +214,9 @@ namespace FASystem
 
                             var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
                                 ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
+
                             var angle = Math.Acos(cos);
+
                             Console.WriteLine("Angle ->" + Utility.radToPI(angle) + "°");
                         }
                     
@@ -265,10 +288,10 @@ namespace FASystem
         /// <summary>
         /// トレーニング情報を設定するためのウィンドウを表示する
         /// </summary>
-        private void showSettingWindow()
+        private void showTrainingSelectWindow()
         {
-            Window settingWindow = new TrainingListWindow();
-            settingWindow.Show();
+            Window selectWindow = new TrainingListWindow();
+            selectWindow.Show();
         }
 
         /// <summary>
@@ -280,7 +303,7 @@ namespace FASystem
         {
             if (TrainingInfo == null)
             {
-                this.showSettingWindow();
+                this.showTrainingSelectWindow();
             }
         }
 
@@ -290,12 +313,27 @@ namespace FASystem
         public void initChart()
         {
             // Init Chart - Data Binding
-            this.ChartLeft.Series.First().DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
-            this.ChartLeft.Series.Last().DataContext = this.UserAngleCollection;
+            //this.ChartLeft.Series.First().DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
+            //this.ChartLeft.Series.Last().DataContext = this.UserAngleCollection;
+            var teachSeries = new EnumerableDataSource<GraphPoint>(this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection());
+            teachSeries.SetXMapping(x => x.X);
+            teachSeries.SetYMapping(y => y.Y);
+            plotter.AddLineGraph(teachSeries, Colors.Red, 2);
+
+            var userAngleSeries = new EnumerableDataSource<GraphPoint>(this.UserAngleCollection);
+            userAngleSeries.SetXMapping(x => x.X);
+            userAngleSeries.SetYMapping(y => y.Y);
+            plotter.AddLineGraph(userAngleSeries, Colors.Green, 2);
+
 
             // Init Chart Widthdd
             RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
-            this.ChartLeft.MaxWidth = target.Tempo.getAllFrame();
+            //this.ChartLeft.MaxWidth = target.Tempo.getAllFrame();
+        }
+
+        private void trainingSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.showTrainingSelectWindow();
         }
     }
 }

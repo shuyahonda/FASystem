@@ -5,44 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FASystem"
         xmlns:sparrow="http://sparrowtoolkit.codeplex.com/wpf"
+        xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         mc:Ignorable="d"
         Title="MainWindow" Height="900" Width="600" ContentRendered="Window_ContentRendered">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="58*"/>
-            <ColumnDefinition Width="21*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="100*"/>
             <RowDefinition Height="465*"/>
             <RowDefinition Height="150*"/>
         </Grid.RowDefinitions>
-        <Canvas x:Name="cameraCanvas" Margin="0,0.286,0.286,1.286" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Canvas Grid.ColumnSpan="2" Background="#FF96D788" Margin="0,0,0,1"/>
-        <Border BorderThickness="1" Background="#FFAEADAD" BorderBrush="#FFA5A5A5" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,10" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center"/>
-        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,1,0,0.5" Background="#FFD2C2C2" Grid.Row="2">
-            <sparrow:SparrowChart x:Name="ChartLeft" Margin="0,10,0,0.429" Grid.Row="1" Width="300" Foreground="Black" >
-                <sparrow:SparrowChart.XAxis>
-                    <sparrow:LinearXAxis MinValue="1" ShowCrossLines="True"/>
-                </sparrow:SparrowChart.XAxis>
-                <sparrow:SparrowChart.YAxis>
-                    <sparrow:LinearYAxis MaxValue="200" MinValue="1" />
-                </sparrow:SparrowChart.YAxis>
-                <sparrow:LineSeries PointsSource="{Binding}" XPath="X" YPath="Y" Stroke="#FF2B33EC" StrokeThickness="2" />
-                <sparrow:LineSeries PointsSource="{Binding}" XPath="X" YPath="Y" Stroke="DarkGreen" StrokeThickness="2" />
-            </sparrow:SparrowChart>
-            <sparrow:SparrowChart x:Name="ChartRight" Margin="0,10,0,0" Width="200" >
-                <sparrow:SparrowChart.XAxis>
-                    <sparrow:LinearXAxis MaxValue="400" MinValue="1" ShowCrossLines="True"/>
-                </sparrow:SparrowChart.XAxis>
-                <sparrow:SparrowChart.YAxis>
-                    <sparrow:LinearYAxis MaxValue="1" MinValue="-1" Header="X(m)" />
-                </sparrow:SparrowChart.YAxis>
-                <sparrow:LineSeries XPath="Frame" YPath="Coordinate" Stroke="#FF2B33EC" StrokeThickness="2" />
-            </sparrow:SparrowChart>
+        <Canvas x:Name="cameraCanvas" Margin="0,0.286,1.286,1.571" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Canvas Background="#FF96D788" Margin="0,0,1.286,0.714" Grid.ColumnSpan="2">
+            <Button x:Name="button1" Content="設定" Canvas.Left="500" Canvas.Top="70" Width="83" Height="41"/>
+        </Canvas>
+        <Border BorderThickness="1" Background="#FFAEADAD" BorderBrush="#FFA5A5A5" Height="1" VerticalAlignment="Bottom" Margin="0,0,1.286,566.571" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,40,0.429,39.714" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center" Height="42"/>
+        <StackPanel Orientation="Horizontal" Margin="0,1.429,1.286,0.429" Background="#FFD2C2C2" Grid.Row="2" Grid.ColumnSpan="2">
+            <d3:ChartPlotter Name="plotter" Margin="10,10,20,10.143" Width="330">
+                <d3:Header FontFamily="Arial"/>
+                <d3:VerticalAxisTitle FontFamily="Arial" Content="angle"/>
+                <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
+                <d3:HorizontalLine Value="{Binding }" Stroke="Red" StrokeThickness="2" />
+
+            </d3:ChartPlotter>
         </StackPanel>
-        <Canvas Grid.Column="1" Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden"/>
+        <Canvas Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden" Margin="14,0.286,11.429,182.429" Grid.RowSpan="2"/>
+        <Button x:Name="trainingSelectButton" Content="トレーニング選択" Margin="4.571,17,6.286,61.714" Grid.Column="1" Click="trainingSelectButton_Click"/>
 
     </Grid>
 </Window>
