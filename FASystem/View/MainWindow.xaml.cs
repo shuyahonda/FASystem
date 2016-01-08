@@ -183,59 +183,64 @@ namespace FASystem
 
                         }
 
+                        Vector vector1 = new Vector();
+                        Vector vector2 = new Vector();
+                        double cos;
+                        double angle;
+                        GraphPoint graphPoint;
+
                         switch (trackingTarget.PlaneType)
-                        {
+                        {                            
                             case PlaneType.CoronalPlane:
                                 // X,Y
-                                var vectorX1 = position1.X - origin.X;
-                                var vectorY1 = position1.Y - origin.Y;
-                                var vectorX2 = position2.X - origin.X;
-                                var vectorY2 = position2.Y - origin.Y;
+                                vector1.X = position1.X - origin.X;
+                                vector1.Y = position1.Y - origin.Y;
+                                vector2.X = position2.X - origin.X;
+                                vector2.Y = position2.Y - origin.Y;
 
-                                var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
-                                    ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
-                                var angle = Math.Acos(cos);
-
+                                cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
+                                    ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
+                                angle = Math.Acos(cos);
+                                graphPoint = new GraphPoint(count, (int)Utility.radToDegree(angle));
+                                this.UserAngleCollection.Add(graphPoint);
 #if DEBUG 
                                 Console.WriteLine("CoronalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
 #endif
 
                                 break;
                             case PlaneType.SagittalPlane:
-                                /*
                                 // Y,Z
-                                var vectorY1 = position1.Y - origin.Y;
-                                var vectorZ1 = position1.Z - origin.Z;
-                                var vectorY2 = position2.Y - origin.Y;
-                                var vectorZ2 = position2.Z - origin.Z;
+                                vector1.X = position1.Y - origin.Y;
+                                vector2.Y = position1.Z - origin.Z;
+                                vector2.X = position2.Y - origin.Y;
+                                vector2.Y = position2.Z - origin.Z;
 
-                                var cos = (vectorY1 * vectorY2 + vectorZ1 * vectorZ2) /
-                                    ((Math.Sqrt(Math.Pow(vectorY1, 2) + Math.Pow(vectorZ1, 2)) * Math.Sqrt(Math.Pow(vectorY2, 2) + Math.Pow(vectorZ2, 2))));
-                                var angle = Math.Acos(cos);
-                                GraphPoint point = new GraphPoint(count, (int)Utility.radToDegree(angle));
-                                this.UserAngleCollection.Add(point);
+                                cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
+                                    ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
+                                angle = Math.Acos(cos);
+                                graphPoint = new GraphPoint(count, (int)Utility.radToDegree(angle));
+                                this.UserAngleCollection.Add(graphPoint);
 #if DEBUG
                                 Console.WriteLine("SagittalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
 #endif
-                                */
+                                
                                 break;
                             case PlaneType.TransversePlane:
-                                /*
                                 // X,Z
-                                var vectorX1 = position1.X - origin.X;
-                                var vectorY1 = position1.Z - origin.Z;
-                                var vectorX2 = position2.X - origin.X;
-                                var vectorY2 = position2.Z - origin.Z;
+                                vector1.X = position1.Y - origin.Y;
+                                vector2.Y = position1.Z - origin.Z;
+                                vector2.X = position2.Y - origin.Y;
+                                vector2.Y = position2.Z - origin.Z;
 
-                                var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
-                                    ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
-
-                                var angle = Math.Acos(cos);
+                                cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
+                                                                    ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
+                                angle = Math.Acos(cos);
+                                graphPoint = new GraphPoint(count, (int)Utility.radToDegree(angle));
+                                this.UserAngleCollection.Add(graphPoint);
 
 #if DEBUG
                                 Console.WriteLine("TransversePlane...Angle ->" + Utility.radToDegree(angle) + "°");
 #endif
-                                */
                                 break;
                             default:
                                 break;
