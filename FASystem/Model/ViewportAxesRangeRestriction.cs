@@ -5,6 +5,9 @@ using System.Windows;
 
 namespace FASystem
 {
+    /// <summary>
+    /// グラフのY軸固定に関するクラス
+    /// </summary>
     public class ViewportAxesRangeRestriction : IViewportRestriction
     {
         public DisplayRange XRange = null;

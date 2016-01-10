@@ -12,7 +12,7 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay;
 using FASystem.View;
 
-namespace FASystem
+namespace FASystem.View
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
@@ -316,7 +316,7 @@ namespace FASystem
             var teachSeries = new EnumerableDataSource<GraphPoint>(this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection());
             teachSeries.SetXMapping(x => x.X);
             teachSeries.SetYMapping(y => y.Y);
-            plotter.AddLineGraph(teachSeries, Colors.Red, 2);
+            plotter.AddLineGraph(teachSeries, Colors.Red, 6);
 
             var userAngleSeries = new EnumerableDataSource<GraphPoint>(this.UserAngleCollection);
             userAngleSeries.SetXMapping(x => x.X);
@@ -329,16 +329,29 @@ namespace FASystem
             this.setYAxisRange((int)target.PermissibleRangeInTop.calcAverage() - 20, (int)target.PermissibleRangeInBottom.calcAverage() + 20);
         }
 
+        /// <summary>
+        /// トレーニングセレクトボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void trainingSelectButton_Click(object sender, RoutedEventArgs e)
         {
             this.showTrainingSelectWindow();
         }
 
+        /// <summary>
+        ///　映像表示部の切取り処理
+        /// </summary>
         private void cropBitmap()
         {
 
         }
 
+        /// <summary>
+        /// 設定ボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void settingButton_Click(object sender, RoutedEventArgs e)
         {
             this.showSettingWindow();

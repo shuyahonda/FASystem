@@ -21,16 +21,14 @@
         <Canvas x:Name="cameraCanvas" Margin="0,0.286,1.286,1.571" Grid.Row="1" Grid.ColumnSpan="2"/>
         <Canvas Background="#FF96D788" Margin="0,0,1.286,0.714" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,40,0.429,39.714" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center" Height="42"/>
-        <StackPanel Orientation="Horizontal" Margin="0,1.429,1.286,0.429" Background="#FFD2C2C2" Grid.Row="2" Grid.ColumnSpan="2">
-            <d3:ChartPlotter Name="plotter" Margin="10,10,20,10.143" Width="330">
-                <d3:Header FontFamily="Arial"/>
-                <d3:VerticalAxisTitle FontFamily="Arial" Content="angle"/>
-                <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
-            </d3:ChartPlotter>
-        </StackPanel>
         <Canvas Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden" Margin="14,0.286,11.429,182.429" Grid.RowSpan="2"/>
         <Button x:Name="trainingSelectButton" Content="トレーニング選択" Margin="5,10,5,60" Grid.Column="1" Click="trainingSelectButton_Click"/>
         <Button x:Name="settingButton" Content="設定" Grid.Column="1" Margin="5,65,5,10" Click="settingButton_Click"/>
+        <d3:ChartPlotter x:Name="plotter" Margin="0,3.429,10.286,0.429" Grid.Row="2" Grid.ColumnSpan="2">
+            <d3:Header FontFamily="Arial"/>
+            <d3:VerticalAxisTitle FontFamily="Arial" Content="angle"/>
+            <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
+        </d3:ChartPlotter>
 
     </Grid>
 </Window>
