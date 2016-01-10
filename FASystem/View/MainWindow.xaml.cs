@@ -311,7 +311,7 @@ namespace FASystem
         {
             // Init Chart - Data Binding
             plotter.Children.RemoveAll((typeof(LineGraph)));
-            
+
             var teachSeries = new EnumerableDataSource<GraphPoint>(this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection());
             teachSeries.SetXMapping(x => x.X);
             teachSeries.SetYMapping(y => y.Y);
@@ -321,6 +321,8 @@ namespace FASystem
             userAngleSeries.SetXMapping(x => x.X);
             userAngleSeries.SetYMapping(y => y.Y);
             plotter.AddLineGraph(userAngleSeries, Colors.Green, 2);
+
+            plotter.LegendVisible = false;
 
 
             // Init Chart - Height
