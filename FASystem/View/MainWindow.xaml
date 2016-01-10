@@ -19,16 +19,19 @@
             <RowDefinition Height="150*"/>
         </Grid.RowDefinitions>
         <Canvas x:Name="cameraCanvas" Margin="0,0.286,1.286,1.571" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Canvas Background="#FF96D788" Margin="0,0,1.286,0.714" Grid.ColumnSpan="2"/>
+        <Canvas Background="#FF96D788" Margin="0,0,1.286,0.714" Grid.ColumnSpan="2">
+            <TextBlock x:Name="textBlock2" Canvas.Left="522" TextWrapping="Wrap" Text="/reps" Canvas.Top="50" FontSize="26.667"/>
+        </Canvas>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,40,0.429,39.714" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center" Height="42"/>
         <Canvas Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden" Margin="14,0.286,11.429,182.429" Grid.RowSpan="2"/>
-        <Button x:Name="trainingSelectButton" Content="トレーニング選択" Margin="5,10,5,60" Grid.Column="1" Click="trainingSelectButton_Click"/>
-        <Button x:Name="settingButton" Content="設定" Grid.Column="1" Margin="5,65,5,10" Click="settingButton_Click"/>
-        <d3:ChartPlotter x:Name="plotter" Margin="0,3.429,10.286,0.429" Grid.Row="2" Grid.ColumnSpan="2">
+        <Button x:Name="trainingSelectButton" Content="トレーニング選択" Margin="4.571,10.429,5.286,120.429" Click="trainingSelectButton_Click" Grid.Row="2" Grid.Column="1"/>
+        <Button x:Name="settingButton" Content="設定" Grid.Column="1" Margin="4.571,79.429,5.286,56.429" Click="settingButton_Click" Grid.Row="2"/>
+        <d3:ChartPlotter x:Name="plotter" Margin="0,3.429,10.429,0.429" Grid.Row="2">
             <d3:Header FontFamily="Arial"/>
             <d3:VerticalAxisTitle FontFamily="Arial" Content="angle"/>
             <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
         </d3:ChartPlotter>
+        <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="0" Grid.Column="1" Margin="2.571,48,76.286,31.714" FontSize="32" FontWeight="Bold"/>
 
     </Grid>
 </Window>
