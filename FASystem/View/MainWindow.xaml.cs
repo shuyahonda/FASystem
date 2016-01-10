@@ -10,9 +10,8 @@ using System.Collections.ObjectModel;
 using FASystem.Helper;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay;
-using FASystem.View;
 
-namespace FASystem.View
+namespace FASystem
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
@@ -288,8 +287,8 @@ namespace FASystem.View
         /// </summary>
         private void showSettingWindow()
         {
-            Window settingWindow = new SettingWindow();
-            settingWindow.Show();
+            //Window settingWindow = new SettingWindow();
+            //settingWindow.Show();
         }
 
         /// <summary>
