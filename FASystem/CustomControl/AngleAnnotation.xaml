@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:FASystem.CustomControl"
              mc:Ignorable="d" Height="50" Width="100">
     <Grid>
-        <Border BorderBrush="#FF6E6E6E" BorderThickness="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="100" Background="#FFC6B8B8"/>
-        <TextBlock x:Name="textBlock" Margin="0,0,0,0.286" TextWrapping="Wrap" Text="180°" FontSize="29.333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border x:Name="AnnotationBack" BorderBrush="#FF6E6E6E" BorderThickness="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="100" Background="#FFC6B8B8"/>
+        <TextBlock x:Name="AngleText" Margin="0,0,0,0.286" TextWrapping="Wrap" Text="180°" FontSize="29.333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Line Fill="#FFDED1D1" Stroke="Tomato" StrokeThickness="3" />
     </Grid>
 </UserControl>

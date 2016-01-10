@@ -245,6 +245,12 @@ namespace FASystem
                                 break;
                         }
                     }
+
+                    foreach (var fixTarget in this.TrainingInfo.FixTrackingTargets)
+                    {
+
+                    }
+
                 }
             }
         }

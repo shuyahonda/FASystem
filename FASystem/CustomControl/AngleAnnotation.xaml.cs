@@ -31,13 +31,14 @@ namespace FASystem.CustomControl
             }
             set
             {
-                this.AngleText.Text = value.ToString();
+                this.AngleText.Text = value.ToString() + "°";
                 this.Angle = value;
             }
         }
 
         /// <summary>
-        /// 
+        /// 線の座標を管理するプロパティ
+        /// 骨格の座標になる
         /// </summary>
         public int EdgeCoordinate {
             get
@@ -53,6 +54,15 @@ namespace FASystem.CustomControl
         public AngleAnnotation()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// アノテーションのBackgroundColorを変更する
+        /// </summary>
+        /// <param name="color"></param>
+        private void setBackColor(Color color)
+        {
+            this.AnnotationBack.Background = new SolidColorBrush(color);
         }
     }
 }

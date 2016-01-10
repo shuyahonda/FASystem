@@ -44,15 +44,17 @@
 
   ],
 
-  "fixTrackingTarget": {
+  "fixTrackingTargets": [
+    {
+      "fixType": "UpAndDownFix",
+      "permissibleRange": 1.0,
 
-    "permissibleRange": 1.0,
-    "fixType": "UpAndDownFix",
-    
-    "targetJoint": [
-      "AnkleLeft",
-      "Head",
-      "SpineBase"
-    ]
-  }
+      "targetJoint": "AnkleLeft"
+    },
+    {
+      "fixType": "UpAndDownFix",
+      "permissibleRange": 1.0,
+      "targetJoint": "Head"
+    }
+  ]
 }
