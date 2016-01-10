@@ -10,6 +10,8 @@ using System.Collections.ObjectModel;
 using FASystem.Helper;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay;
+using FASystem.CustomControl;
+using System.Collections.Generic;
 
 namespace FASystem
 {
@@ -39,6 +41,11 @@ namespace FASystem
         /// Chartへ反映される
         /// </summary>
         private ObservableCollection<GraphPoint> UserAngleCollection { get; set; }
+
+        /// <summary>
+        /// 角度表示用のアノテーションへの参照を保持する
+        /// </summary>
+        private List<AngleAnnotation> AngleAnnotations { get; set; }
 
         /// <summary>
         /// フレームカウント
@@ -108,10 +115,12 @@ namespace FASystem
             //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / bitmapSource.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
             //TransformedBitmap tbBitmap = new TransformedBitmap(bitmapSource, scale);
 
+            /*
             CroppedBitmap croppedBitmap = new CroppedBitmap(bitmapSource, new Int32Rect(this.colorFrameDescription.Width / 2 - this.colorFrameDescription.Width / 2,
                                                                                        this.colorFrameDescription.Height / 2 - this.colorFrameDescription.Height / 2,
                                                                                        (int)this.cameraCanvas.ActualWidth,
                                                                                        (int)this.cameraCanvas.ActualHeight));
+            */
 
             //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / croppedBitmap.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
 
@@ -122,7 +131,7 @@ namespace FASystem
 
             //キャンバスに表示する
             //this.cameraCanvas.Background = new ImageBrush(bitmapSource);
-            this.cameraCanvas.Background = new ImageBrush(croppedBitmap);
+            //this.cameraCanvas.Background = new ImageBrush(croppedBitmap);
 
             //取得したフレームを放棄する
             colorFrame.Dispose();
@@ -181,6 +190,11 @@ namespace FASystem
 
 
                         }
+
+                        //originにアノテーションを表示
+                        ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(origin);
+                        this.cameraCanvas.Children.Add(new AngleAnnotation());
+
 
                         Vector vector1 = new Vector();
                         Vector vector2 = new Vector();
@@ -246,6 +260,7 @@ namespace FASystem
                         }
                     }
 
+                    //固定点
                     foreach (var fixTarget in this.TrainingInfo.FixTrackingTargets)
                     {
 
