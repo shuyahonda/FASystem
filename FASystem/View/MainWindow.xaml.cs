@@ -12,6 +12,7 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay;
 using FASystem.CustomControl;
 using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace FASystem
 {
@@ -45,7 +46,7 @@ namespace FASystem
         /// <summary>
         /// 角度表示用のアノテーションへの参照を保持する
         /// </summary>
-        private List<AngleAnnotation> AngleAnnotations { get; set; }
+        private List<AngleAnnotation> AngleAnnotations { get; set; } = new List<AngleAnnotation>();
 
         /// <summary>
         /// フレームカウント
@@ -64,6 +65,7 @@ namespace FASystem
 
             if (this.kinect == null)
             {
+                Console.WriteLine("Kinectが接続されていません。");
                 this.showCloseDialog("Kinectが接続されていません。アプリケーションを終了します。");
             }
 
@@ -126,11 +128,11 @@ namespace FASystem
 
 
 
-            Console.WriteLine(this.cameraCanvas.ActualWidth);
-            Console.WriteLine(this.cameraCanvas.ActualHeight);
+            //Console.WriteLine(this.cameraCanvas.ActualWidth);
+            //dConsole.WriteLine(this.cameraCanvas.ActualHeight);
 
             //キャンバスに表示する
-            //this.cameraCanvas.Background = new ImageBrush(bitmapSource);
+            this.cameraCanvas.Background = new ImageBrush(bitmapSource);
             //this.cameraCanvas.Background = new ImageBrush(croppedBitmap);
 
             //取得したフレームを放棄する
@@ -193,7 +195,17 @@ namespace FASystem
 
                         //originにアノテーションを表示
                         ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(origin);
-                        this.cameraCanvas.Children.Add(new AngleAnnotation());
+
+                        if(this.AngleAnnotations.Count == 0)
+                        {
+                            AngleAnnotation annotation = new AngleAnnotation();
+                            this.AngleAnnotations.Add(annotation);
+                            this.cameraCanvas.Children.Add(this.AngleAnnotations.First());
+                        }
+                      
+                        Console.WriteLine("X->" + colorPoint.X + ",Y->" + colorPoint.Y);
+                        Canvas.SetLeft(this.AngleAnnotations.First(), colorPoint.X/2);
+                        Canvas.SetTop(this.AngleAnnotations.First(), colorPoint.Y/2);
 
 
                         Vector vector1 = new Vector();

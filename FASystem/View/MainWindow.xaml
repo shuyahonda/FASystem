@@ -7,7 +7,7 @@
         xmlns:sparrow="http://sparrowtoolkit.codeplex.com/wpf"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         mc:Ignorable="d"
-        Title="フォーム分析" Height="900" Width="600" ContentRendered="Window_ContentRendered" WindowStartupLocation="CenterScreen">
+        Title="FASystem" Height="900" Width="600" ContentRendered="Window_ContentRendered" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>
