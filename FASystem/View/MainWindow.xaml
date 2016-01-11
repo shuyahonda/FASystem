@@ -18,10 +18,8 @@
             <RowDefinition Height="465*"/>
             <RowDefinition Height="150*"/>
         </Grid.RowDefinitions>
-        <Canvas x:Name="cameraCanvas" Margin="0,0.286,1.286,1.571" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Canvas Background="#FF96D788" Margin="0,0,1.286,0.714" Grid.ColumnSpan="2">
-            <TextBlock x:Name="textBlock2" Canvas.Left="522" TextWrapping="Wrap" Text="/reps" Canvas.Top="50" FontSize="26.667"/>
-        </Canvas>
+        <Canvas x:Name="cameraCanvas" Margin="0,0,0,0" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Canvas Background="#FF96D788" Margin="0,0,0,0" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Margin="0,40,0.429,39.714" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="Message Queue" VerticalAlignment="Center" Height="42"/>
         <Canvas Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden" Margin="14,0.286,11.429,182.429" Grid.RowSpan="2"/>
         <Button x:Name="trainingSelectButton" Content="トレーニング選択" Margin="4.571,10.429,5.286,120.429" Click="trainingSelectButton_Click" Grid.Row="2" Grid.Column="1"/>
@@ -31,7 +29,8 @@
             <d3:VerticalAxisTitle FontFamily="Arial" Content="angle"/>
             <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
         </d3:ChartPlotter>
-        <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="0" Grid.Column="1" Margin="2.571,48,76.286,31.714" FontSize="32" FontWeight="Bold"/>
+        <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="0" Grid.Column="1" Margin="0,0,76.286,31.714" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" Width="20" Height="42" VerticalAlignment="Bottom"/>
+        <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="/reps" FontSize="26.667" Grid.Column="1" Margin="0,50,11.286,0" HorizontalAlignment="Right" Width="61" Height="36" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
