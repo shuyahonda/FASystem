@@ -41,7 +41,7 @@ namespace FASystem
         /// ユーザーの関節角度を管理するコレクション
         /// Chartへ反映される
         /// </summary>
-        private ObservableCollection<GraphPoint> UserAngleCollection { get; set; }
+        private ObservableCollection<GraphPoint> UserAngleCollection { get; set; } = new ObservableCollection<GraphPoint>();
 
         /// <summary>
         /// 角度表示用のアノテーションへの参照を保持する
@@ -63,10 +63,11 @@ namespace FASystem
             // Init Kinect Sensors
             this.kinect = KinectSensor.GetDefault();
 
-            if (this.kinect == null)
+            Console.WriteLine(this.kinect.ToString());
+
+            if (!this.kinect.IsAvailable)
             {
-                Console.WriteLine("Kinectが接続されていません。");
-                this.showCloseDialog("Kinectが接続されていません。アプリケーションを終了します。");
+                this.showCloseDialog("Kinectが接続されていないか、利用できません。アプリケーションを終了します。");
             }
 
             this.colorImageFormat = ColorImageFormat.Bgra;
@@ -75,12 +76,10 @@ namespace FASystem
             this.colorFrameReader.FrameArrived += ColorFrameReader_FrameArrived;
             bodyFrameReader = kinect.BodyFrameSource.OpenReader();
             bodyFrameReader.FrameArrived += bodyFrameReader_FrameArrived;
+
             this.kinect.Open();
             this.bodies = this.bodies = new Body[kinect.BodyFrameSource.BodyCount];
-
-            this.UserAngleCollection = new ObservableCollection<GraphPoint>();
         }
-
 
         /// <summary>
         /// Kinectセンサーからのカラー画像のハンドリング
@@ -393,11 +392,15 @@ namespace FASystem
 
         private void showCloseDialog(string message)
         {
-            Console.WriteLine("showCloseDialog");
-            string caption = "";
+            string caption = "メッセージ";
             MessageBoxButton button = MessageBoxButton.OK;
             MessageBoxImage icon = MessageBoxImage.Warning;
-            MessageBox.Show(message, caption, button, icon);
+            MessageBoxResult result = MessageBox.Show(message, caption, button, icon);
+
+            if (result == MessageBoxResult.OK)
+            {
+                Environment.Exit(0);
+            }
         }
 
         /// <summary>
