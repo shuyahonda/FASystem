@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,12 @@ namespace FASystem.CustomControl
     /// <summary>
     /// 角度を表示するカスタムコントロール
     /// </summary>
-    public partial class AngleAnnotation : UserControl
+    public partial class AngleAnnotation : UserControl,INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private int angle;
+
         /// <summary>
         /// 角度を保持するプロパティ
         /// </summary>
@@ -27,12 +32,12 @@ namespace FASystem.CustomControl
         {
             get
             {
-                return Angle;
+                return this.angle;
             }
             set
             {
-                this.AngleText.Text = value.ToString() + "°";
-                this.Angle = value;
+                this.angle = value;
+                OnPropertyChanged("Angle");
             }
         }
 
@@ -54,7 +59,10 @@ namespace FASystem.CustomControl
         public AngleAnnotation()
         {
             InitializeComponent();
+
+            this.AngleText.DataContext = this;
         }
+
 
         /// <summary>
         /// アノテーションのBackgroundColorを変更する
@@ -63,6 +71,14 @@ namespace FASystem.CustomControl
         private void setBackColor(Color color)
         {
             this.AnnotationBack.Background = new SolidColorBrush(color);
+        }
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }

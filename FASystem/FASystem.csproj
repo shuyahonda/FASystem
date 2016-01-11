@@ -89,6 +89,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\IntToAngleConverter.cs" />
     <Compile Include="CustomControl\AngleAnnotation.xaml.cs">
       <DependentUpon>AngleAnnotation.xaml</DependentUpon>
     </Compile>

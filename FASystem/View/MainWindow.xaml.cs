@@ -63,9 +63,7 @@ namespace FASystem
             // Init Kinect Sensors
             this.kinect = KinectSensor.GetDefault();
 
-            Console.WriteLine(this.kinect.ToString());
-
-            if (!this.kinect.IsAvailable)
+            if (kinect == null)
             {
                 this.showCloseDialog("Kinectが接続されていないか、利用できません。アプリケーションを終了します。");
             }
@@ -112,27 +110,8 @@ namespace FASystem
                                                             colors,
                                                             this.colorFrameDescription.Width * (int)this.colorFrameDescription.BytesPerPixel);
 
-            //リサイズ
-            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / bitmapSource.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
-            //TransformedBitmap tbBitmap = new TransformedBitmap(bitmapSource, scale);
-
-            /*
-            CroppedBitmap croppedBitmap = new CroppedBitmap(bitmapSource, new Int32Rect(this.colorFrameDescription.Width / 2 - this.colorFrameDescription.Width / 2,
-                                                                                       this.colorFrameDescription.Height / 2 - this.colorFrameDescription.Height / 2,
-                                                                                       (int)this.cameraCanvas.ActualWidth,
-                                                                                       (int)this.cameraCanvas.ActualHeight));
-            */
-
-            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / croppedBitmap.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
-
-
-
-            //Console.WriteLine(this.cameraCanvas.ActualWidth);
-            //dConsole.WriteLine(this.cameraCanvas.ActualHeight);
-
             //キャンバスに表示する
             this.cameraCanvas.Background = new ImageBrush(bitmapSource);
-            //this.cameraCanvas.Background = new ImageBrush(croppedBitmap);
 
             //取得したフレームを放棄する
             colorFrame.Dispose();
@@ -244,6 +223,8 @@ namespace FASystem
                                 angle = Math.Acos(cos);
                                 graphPoint = new GraphPoint(count, (int)Utility.radToDegree(angle));
                                 this.UserAngleCollection.Add(graphPoint);
+
+                                this.AngleAnnotations.First().Angle = (int)Utility.radToDegree(angle);
 #if DEBUG
                                 Console.WriteLine("SagittalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
 #endif
@@ -341,6 +322,8 @@ namespace FASystem
         /// </summary>
         public void initChart()
         {
+            const int margin = 20;
+
             // Init Chart - Data Binding
             plotter.Children.RemoveAll((typeof(LineGraph)));
 
@@ -359,37 +342,38 @@ namespace FASystem
 
             // Init Chart - Height
             RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
-            this.setYAxisRange((int)target.PermissibleRangeInTop.calcAverage() - 20, (int)target.PermissibleRangeInBottom.calcAverage() + 20);
+            this.setYAxisRange((int)target.PermissibleRangeInTop.calcAverage() - margin, (int)target.PermissibleRangeInBottom.calcAverage() + margin);
         }
 
-        /// <summary>
-        /// トレーニングセレクトボタン
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void trainingSelectButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.showTrainingSelectWindow();
-        }
-
+       
         /// <summary>
         ///　映像表示部の切取り処理
         /// </summary>
         private void cropBitmap()
         {
+            //リサイズ
+            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / bitmapSource.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
+            //TransformedBitmap tbBitmap = new TransformedBitmap(bitmapSource, scale);
 
+            /*
+            CroppedBitmap croppedBitmap = new CroppedBitmap(bitmapSource, new Int32Rect(this.colorFrameDescription.Width / 2 - this.colorFrameDescription.Width / 2,
+                                                                                       this.colorFrameDescription.Height / 2 - this.colorFrameDescription.Height / 2,
+                                                                                       (int)this.cameraCanvas.ActualWidth,
+                                                                                       (int)this.cameraCanvas.ActualHeight));
+            */
+
+            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / croppedBitmap.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
+
+
+
+            //Console.WriteLine(this.cameraCanvas.ActualWidth);
+            //dConsole.WriteLine(this.cameraCanvas.ActualHeight);
         }
 
         /// <summary>
-        /// 設定ボタン
+        /// アプリ起動時にKinectが利用できない場合に表示するダイアログ
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void settingButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.showSettingWindow();
-        }
-
+        /// <param name="message"></param>
         private void showCloseDialog(string message)
         {
             string caption = "メッセージ";
@@ -413,6 +397,26 @@ namespace FASystem
             ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
             restr.YRange = new DisplayRange(min, max);
             plotter.Viewport.Restrictions.Add(restr);
+        }
+
+        /// <summary>
+        /// トレーニングセレクトボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void trainingSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.showTrainingSelectWindow();
+        }
+
+        /// <summary>
+        /// 設定ボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void settingButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.showSettingWindow();
         }
     }
 }
