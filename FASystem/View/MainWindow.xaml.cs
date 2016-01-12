@@ -166,6 +166,14 @@ namespace FASystem
                     // TrainingInfoを利用して原点と２つのベクトルから角度を求める
                     foreach (var trackingTarget in this.TrainingInfo.RangeTrackingTargets)
                     {
+                        // 角度アノテーションの表示・座標の調整
+                        AngleAnnotation annotation = this.AngleAnnotations.Where(ant => ant.trackingTarget.Origin == trackingTarget.Origin).First();
+                        ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(body.Joints[trackingTarget.Origin].Position);
+                        Canvas.SetLeft(annotation, colorPoint.X / 2 - annotation.ActualWidth);
+                        Canvas.SetTop(annotation, colorPoint.Y / 2 - annotation.ActualHeight);
+
+
+
                         CameraSpacePoint origin = new CameraSpacePoint();
                         CameraSpacePoint position1 = new CameraSpacePoint();
                         CameraSpacePoint position2 = new CameraSpacePoint();
@@ -186,33 +194,9 @@ namespace FASystem
 
                         }
 
-                        //originにアノテーションを表示
-                        //ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(origin);
-
-                        /*
-                        if(this.AngleAnnotations.Count == 0)
-                        {
-                            AngleAnnotation annotation = new AngleAnnotation();
-                            this.AngleAnnotations.Add(annotation);
-                            this.cameraCanvas.Children.Add(this.AngleAnnotations.First());
-                            this.AngleAnnotations.First().trackingTarget = this.TrainingInfo.RangeTrackingTargets.First();
-                        }
-                        */
-
-                        // 角度アノテーションの表示
-                        foreach (AngleAnnotation annotation in this.AngleAnnotations)
-                        {
-                            ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(
-                                body.Joints[annotation.trackingTarget.Origin].Position);
-                            Canvas.SetLeft(annotation, colorPoint.X / 2);
-                            Canvas.SetLeft(annotation, colorPoint.Y / 2);
-                        }
-                        /*
-                        Console.WriteLine("X->" + colorPoint.X + ",Y->" + colorPoint.Y);
-                        Canvas.SetLeft(this.AngleAnnotations.First(), colorPoint.X/2);
-                        Canvas.SetTop(this.AngleAnnotations.First(), colorPoint.Y/2);
-                        */
                         
+                        
+
                         Vector vector1 = new Vector();
                         Vector vector2 = new Vector();
                         double cos;
@@ -249,9 +233,19 @@ namespace FASystem
                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
                                 angle = Math.Acos(cos);
                                 graphPoint = new GraphPoint(count, (int)Utility.radToDegree(angle));
-                                this.UserAngleCollection.Add(graphPoint);
 
-                                this.AngleAnnotations.First().Angle = (int)Utility.radToDegree(angle);
+
+                                if (trackingTarget.isManageTempo == true)
+                                {
+                                    this.UserAngleCollection.Add(graphPoint);
+
+                                }
+
+                                //this.AngleAnnotations.First().Angle = (int)Utility.radToDegree(angle);
+
+                                var angleAnnotation = this.AngleAnnotations.Where(an => an.trackingTarget.Origin == trackingTarget.Origin).First();
+                                angleAnnotation.Angle = (int)Utility.radToDegree(angle);
+
 #if DEBUG
                                 Console.WriteLine("SagittalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
 #endif
@@ -349,30 +343,34 @@ namespace FASystem
         /// </summary>
         public void initChart()
         {
-            const int margin = 20;
+            const int GRAPH_MARGIN = 20;
+            const int TEACH_BORDER_THICKNESS = 7;
+            const int USER_BORDER_THICKNESS = 4;
 
-            // Init Chart - Data Binding
+            // Init Chart
             plotter.Children.RemoveAll((typeof(LineGraph)));
 
-            var teachSeries = new EnumerableDataSource<GraphPoint>(this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection());
+            //教則
+            var managedTarget = this.TrainingInfo.RangeTrackingTargets.Where(tar => tar.isManageTempo == true).First();
+            var teachSeries = new EnumerableDataSource<GraphPoint>(managedTarget.generateBindingGraphCollection());
+
             teachSeries.SetXMapping(x => x.X);
             teachSeries.SetYMapping(y => y.Y);
-            plotter.AddLineGraph(teachSeries, Colors.Red, 6);
+            plotter.AddLineGraph(teachSeries, Colors.Red, TEACH_BORDER_THICKNESS);
 
+            //ユーザ
             var userAngleSeries = new EnumerableDataSource<GraphPoint>(this.UserAngleCollection);
+
             userAngleSeries.SetXMapping(x => x.X);
             userAngleSeries.SetYMapping(y => y.Y);
-            plotter.AddLineGraph(userAngleSeries, Colors.Green, 2);
+            plotter.AddLineGraph(userAngleSeries, Colors.Green, USER_BORDER_THICKNESS);
 
+            // 高さ固定
+            this.setYAxisRange((int)managedTarget.PermissibleRangeInTop.calcAverage() - GRAPH_MARGIN, (int)managedTarget.PermissibleRangeInBottom.calcAverage() + GRAPH_MARGIN);
             plotter.LegendVisible = false;
-
-
-            // Init Chart - Height
-            RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
-            this.setYAxisRange((int)target.PermissibleRangeInTop.calcAverage() - margin, (int)target.PermissibleRangeInBottom.calcAverage() + margin);
         }
 
-       
+
         /// <summary>
         ///　映像表示部の切取り処理
         /// </summary>

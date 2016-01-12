@@ -4,7 +4,7 @@
 
   "rangeTrackingTargets": [
     {
-      "isUseUnitVector": false, 
+      "isUseUnitVector": false,
       "isManageTempo": true,
 
       "permissibleRangeInBottom": {
@@ -40,8 +40,45 @@
         "WristRight",
         "ShoulderRight"
       ]
-    }
+    },
+    {
+      "isUseUnitVector": false,
+      "isManageTempo": false,
 
+      "permissibleRangeInBottom": {
+        "start": 170,
+        "end": 160
+      },
+
+      "prohibitedRangeInBottom": {
+        "end": 171,
+        "start": 180
+      },
+
+      "permissibleRangeInTop": {
+        "start": 40,
+        "end": 50
+      },
+
+      "prohibitedRangeInTop": {
+        "start": 10,
+        "end": 20
+      },
+
+      "tempo": {
+        "restTimeInBottom": 1.0,
+        "restTimeInTop": 0.5,
+        "downwardMovementTime": 3.0,
+        "riseMovementTime": 1.0
+      },
+
+      "planeType": "SagittalPlane",
+      "origin": "ElbowLeft",
+      "vector": [
+        "WristLeft",
+        "ShoulderLeft"
+      ]
+    }
   ],
 
   "fixTrackingTargets": [
