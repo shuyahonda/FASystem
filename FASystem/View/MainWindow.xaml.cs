@@ -173,7 +173,7 @@ namespace FASystem
                         Canvas.SetTop(annotation, colorPoint.Y / 2 - annotation.ActualHeight);
 
 
-
+           
                         CameraSpacePoint origin = new CameraSpacePoint();
                         CameraSpacePoint position1 = new CameraSpacePoint();
                         CameraSpacePoint position2 = new CameraSpacePoint();
@@ -190,8 +190,6 @@ namespace FASystem
                             origin = body.Joints[trackingTarget.Origin].Position;
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
                             position2 = body.Joints[trackingTarget.Vector[1]].Position;
-
-
                         }
 
                         
