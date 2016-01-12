@@ -31,11 +31,24 @@ namespace FASystem
         private BodyFrameReader bodyFrameReader;
         private Body[] bodies;
 
+        private TrainingInfo trainingInfo;
         /// <summary>
         /// SettingWindowから送られてくるトレーニング情報
         /// FBに必要な情報はすべてこの中に入っている
         /// </summary>
-        public TrainingInfo TrainingInfo { get; set; }
+        public TrainingInfo TrainingInfo
+        {
+            get
+            {
+                return this.trainingInfo;
+            }
+            set
+            {
+                this.trainingInfo = value;
+                initAngleAnnotaions();
+            }
+        }
+
 
         /// <summary>
         /// ユーザーの関節角度を管理するコレクション
@@ -110,6 +123,8 @@ namespace FASystem
                                                             colors,
                                                             this.colorFrameDescription.Width * (int)this.colorFrameDescription.BytesPerPixel);
 
+            this.cropBitmap(bitmapSource);
+
             //キャンバスに表示する
             this.cameraCanvas.Background = new ImageBrush(bitmapSource);
 
@@ -172,20 +187,32 @@ namespace FASystem
                         }
 
                         //originにアノテーションを表示
-                        ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(origin);
+                        //ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(origin);
 
+                        /*
                         if(this.AngleAnnotations.Count == 0)
                         {
                             AngleAnnotation annotation = new AngleAnnotation();
                             this.AngleAnnotations.Add(annotation);
                             this.cameraCanvas.Children.Add(this.AngleAnnotations.First());
+                            this.AngleAnnotations.First().trackingTarget = this.TrainingInfo.RangeTrackingTargets.First();
                         }
-                      
+                        */
+
+                        // 角度アノテーションの表示
+                        foreach (AngleAnnotation annotation in this.AngleAnnotations)
+                        {
+                            ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(
+                                body.Joints[annotation.trackingTarget.Origin].Position);
+                            Canvas.SetLeft(annotation, colorPoint.X / 2);
+                            Canvas.SetLeft(annotation, colorPoint.Y / 2);
+                        }
+                        /*
                         Console.WriteLine("X->" + colorPoint.X + ",Y->" + colorPoint.Y);
                         Canvas.SetLeft(this.AngleAnnotations.First(), colorPoint.X/2);
                         Canvas.SetTop(this.AngleAnnotations.First(), colorPoint.Y/2);
-
-
+                        */
+                        
                         Vector vector1 = new Vector();
                         Vector vector2 = new Vector();
                         double cos;
@@ -349,7 +376,7 @@ namespace FASystem
         /// <summary>
         ///　映像表示部の切取り処理
         /// </summary>
-        private void cropBitmap()
+        private void cropBitmap(BitmapSource source)
         {
             //リサイズ
             //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / bitmapSource.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
@@ -417,6 +444,20 @@ namespace FASystem
         private void settingButton_Click(object sender, RoutedEventArgs e)
         {
             this.showSettingWindow();
+        }
+
+
+        /// <summary>
+        /// 角度表示用アノテーションの初期化
+        /// </summary>
+        private void initAngleAnnotaions()
+        {
+            foreach (var target in this.TrainingInfo.RangeTrackingTargets)
+            {
+                AngleAnnotation annotation = new AngleAnnotation(target);
+                this.AngleAnnotations.Add(annotation);
+                this.cameraCanvas.Children.Add(annotation);
+            }
         }
     }
 }

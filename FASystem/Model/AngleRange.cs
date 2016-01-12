@@ -33,5 +33,31 @@ namespace FASystem.Model
         {
             return Start > End ? Start - End : End - Start;
         }
+
+        /// <summary>
+        /// 角度が範囲内にあるか判定する
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public bool inRangeAngle(int angle)
+        {
+            if (angle <= getLargeAngle() && angle >= getSmallAngle())
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        private float getSmallAngle()
+        {
+            return Start > End ? End : Start;
+        }
+
+        private float getLargeAngle()
+        {
+            return Start > End ? Start : End;
+        }
     }
 }

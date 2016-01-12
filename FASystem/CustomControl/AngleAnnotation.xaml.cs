@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FASystem.Model;
+using Microsoft.Kinect;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -21,6 +23,10 @@ namespace FASystem.CustomControl
     /// </summary>
     public partial class AngleAnnotation : UserControl,INotifyPropertyChanged
     {
+        private static readonly Color PERMISSIBLE_COLOR = Colors.GreenYellow;
+        private static readonly Color PROHIBITED_COLOR = Colors.OrangeRed;
+        private static readonly Color NORMAL_COLOR = Colors.LightGray;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private int angle;
@@ -37,6 +43,7 @@ namespace FASystem.CustomControl
             set
             {
                 this.angle = value;
+                this.checkAngle(this.angle);
                 OnPropertyChanged("Angle");
             }
         }
@@ -56,6 +63,13 @@ namespace FASystem.CustomControl
             }
         }
 
+        /// <summary>
+        /// トラッキングターゲット
+        /// 原点となる関節と、許容範囲・非許容範囲を利用する
+        /// </summary>
+        public RangeTrackingTarget trackingTarget { get; set; }
+
+
         public AngleAnnotation()
         {
             InitializeComponent();
@@ -63,6 +77,10 @@ namespace FASystem.CustomControl
             this.AngleText.DataContext = this;
         }
 
+        public AngleAnnotation(RangeTrackingTarget target) : this()
+        {
+            this.trackingTarget = target;
+        }
 
         /// <summary>
         /// アノテーションのBackgroundColorを変更する
@@ -78,6 +96,20 @@ namespace FASystem.CustomControl
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        private void checkAngle(int angle)
+        {
+            if (this.trackingTarget.PermissibleRangeInTop.inRangeAngle(angle) || this.trackingTarget.PermissibleRangeInBottom.inRangeAngle(angle))
+            {
+                this.setBackColor(PERMISSIBLE_COLOR);
+            } else if (this.trackingTarget.ProhibitedRangeInTop.inRangeAngle(angle) || this.trackingTarget.ProhibitedRangeInBottom.inRangeAngle(angle))
+            {
+                this.setBackColor(PROHIBITED_COLOR);
+            } else
+            {
+                this.setBackColor(NORMAL_COLOR);
             }
         }
     }
