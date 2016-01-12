@@ -29,8 +29,8 @@
             <d3:VerticalAxisTitle FontFamily="Arial" Content="angle"/>
             <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
         </d3:ChartPlotter>
-        <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="0" Grid.Column="1" Margin="0,0,76.286,31.714" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" Width="20" Height="42" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="/reps" FontSize="26.667" Grid.Column="1" Margin="0,50,11.286,0" HorizontalAlignment="Right" Width="61" Height="36" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Grid.Column="1" Margin="0,0,54.286,35.714" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" Width="40" Height="42" VerticalAlignment="Bottom"><Run Text="1"/><Run Text="0"/></TextBlock>
+        <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="/reps" FontSize="26.667" Grid.Column="1" Margin="0,46,1.286,0" HorizontalAlignment="Right" Width="61" Height="36" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

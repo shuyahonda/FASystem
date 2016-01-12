@@ -93,15 +93,23 @@
     <Compile Include="CustomControl\AngleAnnotation.xaml.cs">
       <DependentUpon>AngleAnnotation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomControl\MessageQueueLabel.xaml.cs">
+      <DependentUpon>MessageQueueLabel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helper\CommonConstants.cs" />
     <Compile Include="Helper\Utility.cs" />
     <Compile Include="Model\GraphPoint.cs" />
+    <Compile Include="Model\Reps.cs" />
     <Compile Include="ViewModel\TrainingInfoViewModel.cs" />
     <Compile Include="View\TrainingListWindow.xaml.cs">
       <DependentUpon>TrainingListWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\ViewportAxesRangeRestriction.cs" />
     <Page Include="CustomControl\AngleAnnotation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomControl\MessageQueueLabel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

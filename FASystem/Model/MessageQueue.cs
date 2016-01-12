@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Model
 {
-    class MessageQueue : Queue<Message>
+    class MessageQueue
     {
         public List<Message> Queue { get; set; }
 

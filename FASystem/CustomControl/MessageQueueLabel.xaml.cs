@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FASystem.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,9 @@ namespace FASystem.CustomControl
     /// </summary>
     public partial class MessageQueueLabel : UserControl
     {
+        //public MessageQueue messageQueue { get; set; } = new MessageQueue();
+
+
         public MessageQueueLabel()
         {
             InitializeComponent();
