@@ -173,7 +173,7 @@ namespace FASystem
                         Canvas.SetTop(annotation, colorPoint.Y / 2 - annotation.ActualHeight);
 
 
-           
+                        //ベクトル計算してグラフに反映する。ただし、isManegeTempoプロパティがTrueのオブジェクトのみ。
                         CameraSpacePoint origin = new CameraSpacePoint();
                         CameraSpacePoint position1 = new CameraSpacePoint();
                         CameraSpacePoint position2 = new CameraSpacePoint();
