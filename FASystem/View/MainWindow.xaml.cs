@@ -123,7 +123,7 @@ namespace FASystem
                                                             colors,
                                                             this.colorFrameDescription.Width * (int)this.colorFrameDescription.BytesPerPixel);
 
-            this.cropBitmap(bitmapSource);
+            this.cropBitmap(ref bitmapSource);
 
             //キャンバスに表示する
             this.cameraCanvas.Background = new ImageBrush(bitmapSource);
@@ -372,25 +372,16 @@ namespace FASystem
         /// <summary>
         ///　映像表示部の切取り処理
         /// </summary>
-        private void cropBitmap(BitmapSource source)
+        private void cropBitmap(ref BitmapSource source)
         {
             //リサイズ
-            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / bitmapSource.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
-            //TransformedBitmap tbBitmap = new TransformedBitmap(bitmapSource, scale);
+            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / source.PixelWidth), (this.cameraCanvas.ActualHeight / source.PixelHeight));
+            //TransformedBitmap tbBitmap = new TransformedBitmap(source, scale);
 
-            /*
-            CroppedBitmap croppedBitmap = new CroppedBitmap(bitmapSource, new Int32Rect(this.colorFrameDescription.Width / 2 - this.colorFrameDescription.Width / 2,
-                                                                                       this.colorFrameDescription.Height / 2 - this.colorFrameDescription.Height / 2,
-                                                                                       (int)this.cameraCanvas.ActualWidth,
-                                                                                       (int)this.cameraCanvas.ActualHeight));
-            */
-
-            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / croppedBitmap.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
-
-
-
-            //Console.WriteLine(this.cameraCanvas.ActualWidth);
-            //dConsole.WriteLine(this.cameraCanvas.ActualHeight);
+            source = new CroppedBitmap(source, new Int32Rect(this.colorFrameDescription.Width / 2 - (int)this.cameraCanvas.ActualWidth / 2,
+                                                             this.colorFrameDescription.Height / 2 - (int)this.cameraCanvas.ActualHeight / 2,
+                                                             (int)this.cameraCanvas.ActualWidth,
+                                                             (int)this.cameraCanvas.ActualHeight));
         }
 
         /// <summary>
