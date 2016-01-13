@@ -342,8 +342,8 @@ namespace FASystem
         public void initChart()
         {
             const int GRAPH_MARGIN = 20;
-            const int TEACH_BORDER_THICKNESS = 7;
-            const int USER_BORDER_THICKNESS = 4;
+            const int TEACH_BORDER_THICKNESS = 8;
+            const int USER_BORDER_THICKNESS = 6;
 
             // Init Chart
             plotter.Children.RemoveAll((typeof(LineGraph)));
@@ -361,7 +361,7 @@ namespace FASystem
 
             userAngleSeries.SetXMapping(x => x.X);
             userAngleSeries.SetYMapping(y => y.Y);
-            plotter.AddLineGraph(userAngleSeries, Colors.Green, USER_BORDER_THICKNESS);
+            plotter.AddLineGraph(userAngleSeries, Colors.LightGreen, USER_BORDER_THICKNESS);
 
             // 高さ固定
             this.setYAxisRange((int)managedTarget.PermissibleRangeInTop.calcAverage() - GRAPH_MARGIN, (int)managedTarget.PermissibleRangeInBottom.calcAverage() + GRAPH_MARGIN);
