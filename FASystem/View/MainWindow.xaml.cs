@@ -52,7 +52,6 @@ namespace FASystem
             }
         }
 
-
         /// <summary>
         /// ユーザーの関節角度を管理するコレクション
         /// Chartへ反映される
@@ -464,20 +463,30 @@ namespace FASystem
             }
         }
 
+        /// <summary>
+        /// トレーニング開始ボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void trainingStartButton_Click(object sender, RoutedEventArgs e)
         {
             // カウントダウンを開始する
             this.messageTextBlock.Text = "カウントダウンを開始します";
 
             dispTimer = new DispatcherTimer();
-            dispTimer.Tick += DispTimer_Tick;
+            dispTimer.Tick += DispTimer_Countdown;
             dispTimer.Interval = new TimeSpan(0, 0, 1);
             dispTimer.Start();
 
             this.countdown = 6;
         }
 
-        private void DispTimer_Tick(object sender, EventArgs e)
+        /// <summary>
+        /// カウントダウンのハンドリング
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DispTimer_Countdown(object sender, EventArgs e)
         {
             this.countdown--;
 
@@ -493,5 +502,37 @@ namespace FASystem
                 this.messageTextBlock.Text = this.countdown.ToString();
             }
         }
+
+        /// <summary>
+        /// トレーニング終了時のハンドリング
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DispTimer_TrainingFinished(object sender, EventArgs e)
+        {
+            this.countdown--;
+
+            if (this.countdown == 0)
+            {
+                this.messageTextBlock.Text = "トレーニングが選択されていません";
+            }
+        }
+
+        /// <summary>
+        /// トレーニング終了時の処理
+        /// </summary>
+        private void finishedTraining()
+        {
+            this.messageTextBlock.Text = "トレーニング終了です。お疲れ様でした。";
+
+            //二秒後
+            dispTimer = new DispatcherTimer();
+            dispTimer.Tick += DispTimer_TrainingFinished;
+            dispTimer.Interval = new TimeSpan(0, 0, 1);
+            dispTimer.Start();
+
+            this.countdown = 2;
+        }
+
     }
 }
