@@ -481,12 +481,13 @@ namespace FASystem
         {
             this.countdown--;
 
-            if (this.countdown == 0 )
+            if (this.countdown == 0 || this.countdown == -1)
             {
                 this.messageTextBlock.Text = "トレーニングを開始してください";
             } else if (this.countdown == -2)
             {
                 this.messageTextBlock.Text = "トレーニング中...";
+                this.dispTimer.Stop();
             } else
             {
                 this.messageTextBlock.Text = this.countdown.ToString();

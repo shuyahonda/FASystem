@@ -88,7 +88,9 @@ namespace FASystem.CustomControl
         /// <param name="color"></param>
         private void setBackColor(Color color)
         {
-            this.AnnotationBack.Background = new SolidColorBrush(color);
+            SolidColorBrush colorBrush = new SolidColorBrush(color);
+            colorBrush.Opacity = 0.9;
+            this.AnnotationBack.Background = colorBrush;
         }
 
         protected void OnPropertyChanged(string name)
