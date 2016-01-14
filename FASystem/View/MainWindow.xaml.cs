@@ -66,7 +66,7 @@ namespace FASystem
         /// <summary>
         /// フレームカウント
         /// </summary>
-        private int count = 0;
+        private int frameCount = 0;
 
         /// <summary>
         /// カウントダウン用
@@ -157,12 +157,12 @@ namespace FASystem
         {
             if (this.TrainingInfo == null) return;
 
-            count++;
+            frameCount++;
 
-            if (count == this.TrainingInfo.RangeTrackingTargets.First().Tempo.getAllFrame())
+            if (frameCount == this.TrainingInfo.RangeTrackingTargets.First().Tempo.getAllFrame())
             {
                 this.UserAngleCollection.Clear();
-                count = 0;
+                frameCount = 0;
             }
 
             using (var bodyFrame = e.FrameReference.AcquireFrame())
@@ -228,7 +228,7 @@ namespace FASystem
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
                                 angle = Math.Acos(cos);
-                                graphPoint = new GraphPoint(count, (int)Utility.radToDegree(angle));
+                                graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
                                 this.UserAngleCollection.Add(graphPoint);
 #if DEBUG 
                                 Console.WriteLine("CoronalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
@@ -245,7 +245,7 @@ namespace FASystem
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
                                 angle = Math.Acos(cos);
-                                graphPoint = new GraphPoint(count, (int)Utility.radToDegree(angle));
+                                graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
 
 
                                 if (trackingTarget.isManageTempo == true)
@@ -274,7 +274,7 @@ namespace FASystem
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
                                 angle = Math.Acos(cos);
-                                graphPoint = new GraphPoint(count, (int)Utility.radToDegree(angle));
+                                graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
                                 this.UserAngleCollection.Add(graphPoint);
 
 #if DEBUG
@@ -515,6 +515,7 @@ namespace FASystem
             if (this.countdown == 0)
             {
                 this.messageTextBlock.Text = "トレーニングが選択されていません";
+                this.dispTimer.Stop();
             }
         }
 
@@ -533,6 +534,5 @@ namespace FASystem
 
             this.countdown = 2;
         }
-
     }
 }
