@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Kinect.Wpf.Controls;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,6 +14,7 @@ namespace FASystem
     /// </summary>
     public partial class App : Application
     {
+
         /// <summary>
         /// アプリケーションが終了する時のイベント。
         /// </summary>

@@ -13,6 +13,9 @@ using Microsoft.Research.DynamicDataDisplay;
 using FASystem.CustomControl;
 using System.Collections.Generic;
 using System.Windows.Controls;
+using Microsoft.Kinect.Wpf.Controls;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace FASystem
 {
@@ -67,6 +70,16 @@ namespace FASystem
         private int count = 0;
 
         /// <summary>
+        /// カウントダウン用
+        /// </summary>
+        private int countdown;
+
+        /// <summary>
+        /// カウントダウンに使用するタイマー
+        /// </summary>
+        private DispatcherTimer dispTimer;
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public MainWindow()
@@ -90,6 +103,9 @@ namespace FASystem
 
             this.kinect.Open();
             this.bodies = this.bodies = new Body[kinect.BodyFrameSource.BodyCount];
+
+            KinectRegion.SetKinectRegion(this, kinectRegion);
+            this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
         }
 
         /// <summary>
@@ -377,11 +393,12 @@ namespace FASystem
             //リサイズ
             //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / source.PixelWidth), (this.cameraCanvas.ActualHeight / source.PixelHeight));
             //TransformedBitmap tbBitmap = new TransformedBitmap(source, scale);
-
+            /*
             source = new CroppedBitmap(source, new Int32Rect(this.colorFrameDescription.Width / 2 - (int)this.cameraCanvas.ActualWidth / 2,
                                                              this.colorFrameDescription.Height / 2 - (int)this.cameraCanvas.ActualHeight / 2,
                                                              (int)this.cameraCanvas.ActualWidth,
                                                              (int)this.cameraCanvas.ActualHeight));
+                                                             */
         }
 
         /// <summary>
@@ -444,6 +461,35 @@ namespace FASystem
                 AngleAnnotation annotation = new AngleAnnotation(target);
                 this.AngleAnnotations.Add(annotation);
                 this.cameraCanvas.Children.Add(annotation);
+            }
+        }
+
+        private void trainingStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            // カウントダウンを開始する
+            this.messageTextBlock.Text = "カウントダウンを開始します";
+
+            dispTimer = new DispatcherTimer();
+            dispTimer.Tick += DispTimer_Tick;
+            dispTimer.Interval = new TimeSpan(0, 0, 1);
+            dispTimer.Start();
+
+            this.countdown = 6;
+        }
+
+        private void DispTimer_Tick(object sender, EventArgs e)
+        {
+            this.countdown--;
+
+            if (this.countdown == 0 )
+            {
+                this.messageTextBlock.Text = "トレーニングを開始してください";
+            } else if (this.countdown == -2)
+            {
+                this.messageTextBlock.Text = "トレーニング中...";
+            } else
+            {
+                this.messageTextBlock.Text = this.countdown.ToString();
             }
         }
     }
