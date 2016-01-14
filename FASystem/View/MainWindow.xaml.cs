@@ -440,17 +440,6 @@ namespace FASystem
         }
 
         /// <summary>
-        /// 設定ボタン
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void settingButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.showSettingWindow();
-        }
-
-
-        /// <summary>
         /// 角度表示用アノテーションの初期化
         /// </summary>
         private void initAngleAnnotaions()
@@ -526,13 +515,22 @@ namespace FASystem
         {
             this.messageTextBlock.Text = "トレーニング終了です。お疲れ様でした。";
 
-            //二秒後
             dispTimer = new DispatcherTimer();
             dispTimer.Tick += DispTimer_TrainingFinished;
             dispTimer.Interval = new TimeSpan(0, 0, 1);
             dispTimer.Start();
 
             this.countdown = 2;
+        }
+
+        /// <summary>
+        /// トレーニング終了ボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void trainingEndButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

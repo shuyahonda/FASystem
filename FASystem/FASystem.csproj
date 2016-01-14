@@ -90,6 +90,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converter\IntToAngleConverter.cs" />
+    <Compile Include="Converter\IntToStringConverter.cs" />
     <Compile Include="CustomControl\AngleAnnotation.xaml.cs">
       <DependentUpon>AngleAnnotation.xaml</DependentUpon>
     </Compile>

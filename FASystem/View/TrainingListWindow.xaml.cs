@@ -4,6 +4,7 @@ using Microsoft.Kinect.Wpf.Controls;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,10 +23,28 @@ namespace FASystem
     /// <summary>
     /// SettingWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class TrainingListWindow : Window
+    public partial class TrainingListWindow : Window, INotifyPropertyChanged
     {
+        private const int DEFAULT_REPS = 8;
+
         private List<TrainingInfo> trainingInfos;
 
+        private int reps = DEFAULT_REPS;
+
+        public int Reps
+        {
+            get
+            {
+                return reps;
+            }
+            set
+            {
+                this.reps = value;
+                OnPropertyChanged("Reps");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public TrainingListWindow()
         {
@@ -41,6 +60,8 @@ namespace FASystem
 
             // トレーニングリストを表示
             this.loadTrainingInfos();
+
+            this.DataContext = this;
         }
 
         /// <summary>
@@ -101,6 +122,24 @@ namespace FASystem
             mainWindow.TrainingInfo = trainingInfo;
             mainWindow.initChart();
             this.Close();
+        }
+
+        private void repsUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Reps++;
+        }
+
+        private void repsDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Reps--;
+        }
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }

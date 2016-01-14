@@ -39,15 +39,19 @@
         <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="/reps" FontSize="24" Grid.Column="1" Margin="0,0,5.286,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <k:KinectRegion x:Name="kinectRegion" Margin="0,0,0,0" Grid.Column="1" Grid.Row="2" >
             <Grid Grid.Column="1" Grid.RowSpan="2" >
-                <Button x:Name="trainingSelectButton" Margin="5,77,5,75.429" Click="trainingSelectButton_Click" FontWeight="Bold">
+                <Button x:Name="trainingSelectButton" Margin="5,10,4.857,0" Click="trainingSelectButton_Click" FontWeight="Bold" Height="51" VerticalAlignment="Top">
                     <Button.Content>
-                        <TextBlock Text="トレーニング選択" TextWrapping="WrapWithOverflow" FontSize="18.667" TextAlignment="Center" FontWeight="Normal" />
+                        <TextBlock Text="選択" TextWrapping="WrapWithOverflow" FontSize="18.667" TextAlignment="Center" FontWeight="Normal" />
                     </Button.Content>
                 </Button>
-                <Button x:Name="settingButton" Content="設定" Margin="5,147,4.857,10.429" Click="settingButton_Click" FontSize="18.667"/>
-                <Button x:Name="trainingStartButton" Margin="5,10,4.857,0" VerticalAlignment="Top" Height="52" FontWeight="Bold" FontSize="18.667" Background="#FF87CB79" Click="trainingStartButton_Click">
+                <Button x:Name="trainingEndButton" Margin="5,141,4.857,0" Click="settingButton_Click" FontSize="18.667" Height="52" Background="#FFD78686" VerticalAlignment="Top">
                     <Button.Content>
-                        <TextBlock Text="トレーニング開始" TextWrapping="WrapWithOverflow" FontSize="18.667" TextAlignment="Center" FontWeight="Normal" />
+                        <TextBlock Text="終了" TextWrapping="WrapWithOverflow" FontSize="18.667" TextAlignment="Center" FontWeight="Normal" />
+                    </Button.Content>
+                </Button>
+                <Button x:Name="trainingStartButton" Margin="5,72,4.857,0" VerticalAlignment="Top" Height="52" FontWeight="Bold" FontSize="18.667" Background="#FF87CB79" Click="trainingStartButton_Click">
+                    <Button.Content>
+                        <TextBlock Text="開始" TextWrapping="WrapWithOverflow" FontSize="18.667" TextAlignment="Center" FontWeight="Normal" />
                     </Button.Content>
                 </Button>
             </Grid>
