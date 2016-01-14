@@ -24,7 +24,7 @@
         <Canvas x:Name="cameraCanvas" Margin="0,0,0,0" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
         <Grid x:Name="MessageGrid" Background="#E596D788" Margin="0,-3,0.429,2.571" Grid.ColumnSpan="2"/>
 
-        <TextBlock x:Name="messageTextBlock" TextWrapping="Wrap" Margin="0,17,0.429,17.571" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="トレーニングが選択されていません" VerticalAlignment="Center"/>
+        <TextBlock x:Name="messageTextBlock" TextWrapping="Wrap" Margin="0,17,0.286,17.571" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="開始ボタンを押してください" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
         <Canvas Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden" Margin="14,0.286,11.429,182.429" Grid.RowSpan="2"/>
 
 

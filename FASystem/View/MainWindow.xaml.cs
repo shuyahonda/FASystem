@@ -503,7 +503,7 @@ namespace FASystem
 
             if (this.countdown == 0)
             {
-                this.messageTextBlock.Text = "トレーニングが選択されていません";
+                this.messageTextBlock.Text = "開始ボタンを押してください";
                 this.dispTimer.Stop();
             }
         }
@@ -530,7 +530,7 @@ namespace FASystem
         /// <param name="e"></param>
         private void trainingEndButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.finishedTraining();
         }
     }
 }
