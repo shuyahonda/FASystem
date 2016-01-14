@@ -92,7 +92,7 @@ namespace FASystem
 
 
             //TODO: あとで修正
-            String text = System.Text.Encoding.UTF8.GetString(FASystem.Properties.Resources.TestTraining);
+            String text = System.Text.Encoding.UTF8.GetString(FASystem.Properties.Resources.Training);
 
             Console.WriteLine(text);
 

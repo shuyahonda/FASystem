@@ -63,9 +63,9 @@ namespace FASystem.Properties {
         /// <summary>
         ///   型 System.Byte[] のローカライズされたリソースを検索します。
         /// </summary>
-        internal static byte[] TestTraining {
+        internal static byte[] Training {
             get {
-                object obj = ResourceManager.GetObject("TestTraining", resourceCulture);
+                object obj = ResourceManager.GetObject("Training", resourceCulture);
                 return ((byte[])(obj));
             }
         }

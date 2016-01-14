@@ -98,14 +98,20 @@
       <DependentUpon>MessageQueueLabel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\CommonConstants.cs" />
+    <Compile Include="Helper\Exporter.cs" />
     <Compile Include="Helper\Utility.cs" />
     <Compile Include="Model\GraphPoint.cs" />
     <Compile Include="Model\Reps.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\TrainingInfoViewModel.cs" />
     <Compile Include="View\TrainingListWindow.xaml.cs">
       <DependentUpon>TrainingListWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\ViewportAxesRangeRestriction.cs" />
+    <Compile Include="Helper\ViewportAxesRangeRestriction.cs" />
     <Page Include="CustomControl\AngleAnnotation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -152,11 +158,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -164,9 +165,10 @@
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="Json\TestTraining.json" />
+    <Resource Include="Json\Training.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
