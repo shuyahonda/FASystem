@@ -24,7 +24,7 @@
         <Canvas x:Name="cameraCanvas" Margin="0,0,0,0" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
         <Grid x:Name="MessageGrid" Background="#E596D788" Margin="0,-3,0.429,2.571" Grid.ColumnSpan="2"/>
 
-        <TextBlock x:Name="messageTextBlock" TextWrapping="Wrap" Margin="0" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="トレーニングが選択されていません" VerticalAlignment="Center"/>
+        <TextBlock x:Name="messageTextBlock" TextWrapping="Wrap" Margin="0,17,0.429,17.571" TextAlignment="Center" FontSize="32" Foreground="#FF2E2E2E" Text="トレーニングが選択されていません" VerticalAlignment="Center"/>
         <Canvas Grid.Row="1" OpacityMask="Black" Background="#FFF0BEBE" Visibility="Hidden" Margin="14,0.286,11.429,182.429" Grid.RowSpan="2"/>
 
 
@@ -35,8 +35,8 @@
             <d3:HorizontalAxisTitle FontFamily="Arial" Content="frame"/>
         </d3:ChartPlotter>
 
-        <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Grid.Column="1" Margin="0,0,54.286,0" FontSize="32" Height="42" VerticalAlignment="Center" HorizontalAlignment="Right" Width="40"><Run Text="1"/><Run Text="0"/></TextBlock>
-        <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="/reps" FontSize="24" Grid.Column="1" Margin="0,0,5.286,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Grid.Column="1" Margin="0,0,54.286,0" FontSize="32" Height="42" VerticalAlignment="Center" HorizontalAlignment="Right" Width="40" Visibility="Hidden"><Run Text="1"/><Run Text="0"/></TextBlock>
+        <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="/reps" FontSize="24" Grid.Column="1" Margin="0,0,5.286,0" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Hidden"/>
         <k:KinectRegion x:Name="kinectRegion" Margin="0,0,0,0" Grid.Column="1" Grid.Row="2" >
             <Grid Grid.Column="1" Grid.RowSpan="2" >
                 <Button x:Name="trainingSelectButton" Margin="5,10,4.857,0" Click="trainingSelectButton_Click" FontWeight="Bold" Height="51" VerticalAlignment="Top">
@@ -44,7 +44,7 @@
                         <TextBlock Text="選択" TextWrapping="WrapWithOverflow" FontSize="18.667" TextAlignment="Center" FontWeight="Normal" />
                     </Button.Content>
                 </Button>
-                <Button x:Name="trainingEndButton" Margin="5,141,4.857,0" Click="settingButton_Click" FontSize="18.667" Height="52" Background="#FFD78686" VerticalAlignment="Top">
+                <Button x:Name="trainingEndButton" Margin="5,141,4.857,0" FontSize="18.667" Height="52" Background="#FFD78686" VerticalAlignment="Top" Click="trainingEndButton_Click">
                     <Button.Content>
                         <TextBlock Text="終了" TextWrapping="WrapWithOverflow" FontSize="18.667" TextAlignment="Center" FontWeight="Normal" />
                     </Button.Content>
