@@ -1,0 +1,8 @@
+diff a/FASystem/App.xaml.cs b/FASystem/App.xaml.cs	(rejected hunks)
+@@ -1,4 +0,5 @@
+-ï»¿using System;
++ï»¿using Microsoft.Kinect.Wpf.Controls;
++using System;
+ using System.Collections.Generic;
+ using System.Configuration;
+ using System.Data;

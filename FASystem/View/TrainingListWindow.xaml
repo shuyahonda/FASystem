@@ -4,15 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FASystem"
-                xmlns:k="http://schemas.microsoft.com/kinect/2014"
-
+        xmlns:k="http://schemas.microsoft.com/kinect/2014"
         mc:Ignorable="d"
-        Title="SettingWindow" Height="300" Width="300">
+        xmlns:c="clr-namespace:FASystem.Converter"
+        Title="トレーニング選択" Height="600" Width="507.857" Background="#FFE8E8E8" BorderBrush="#FFB65858" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Topmost="True">
+
+    <Window.Resources>
+        <c:IntToStringConverter x:Key="converter" />
+    </Window.Resources>
+    
     <Grid>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="トレーニングを選択してください" VerticalAlignment="Top"/>
-        <k:KinectRegion Name="kinectRegion" Width="250" Height="200">
-        <ListBox x:Name="trainingList" Margin="10,40,10,10.5" DisplayMemberPath="TrainingName" SelectionChanged="trainingList_SelectionChanged" FontSize="21.333"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60*"/>
+            <RowDefinition Height="510*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="textBlock" Margin="10,10,10.286,11" TextWrapping="Wrap" Text="トレーニングを選択してください" FontSize="29.333"/>
+        <k:KinectRegion Name="kinectRegion" Margin="0,0,0,0" Grid.Row="1">
+            <ListBox x:Name="trainingList" Margin="10,10,10,10" DisplayMemberPath="TrainingName" SelectionChanged="trainingList_SelectionChanged" FontSize="32"/>
         </k:KinectRegion>
+        <StackPanel Margin="0,0,10.286,0" HorizontalAlignment="Right" Width="50" Visibility="Hidden">
+            <Button x:Name="repsUpButton" Content="＋" Height="30" FontSize="21.333" FontWeight="Bold" Click="repsUpButton_Click"/>
+            <Button x:Name="repsDownButton" Content="－" Height="30" FontSize="21.333" FontWeight="Bold" Click="repsDownButton_Click"/>
+        </StackPanel>
+        <TextBlock x:Name="repsText" Text="{Binding Reps,Converter={StaticResource converter}}" TextWrapping="Wrap" Margin="395,10,65.286,8" VerticalAlignment="Center" FontSize="26.667" Height="42" Visibility="Hidden"><Run Text="10"/><LineBreak/><Run/></TextBlock>
 
     </Grid>
 </Window>

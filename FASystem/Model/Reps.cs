@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace FASystem.Model
 {
-    class MessageQueue
+    class Reps
     {
-        public List<Message> Queue { get; set; }
-
-        public MessageQueue()
-        {
-
-        }
     }
 }

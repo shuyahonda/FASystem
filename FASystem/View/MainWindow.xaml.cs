@@ -5,10 +5,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 using FASystem.Model;
+using FASystem.Enum;
 using System.Collections.ObjectModel;
 using FASystem.Helper;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay;
+using FASystem.CustomControl;
+using System.Collections.Generic;
+using System.Windows.Controls;
+using Microsoft.Kinect.Wpf.Controls;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace FASystem
 {
@@ -27,22 +34,49 @@ namespace FASystem
         private BodyFrameReader bodyFrameReader;
         private Body[] bodies;
 
+        private TrainingInfo trainingInfo;
         /// <summary>
         /// SettingWindowから送られてくるトレーニング情報
         /// FBに必要な情報はすべてこの中に入っている
         /// </summary>
-        public TrainingInfo TrainingInfo { get; set; }
+        public TrainingInfo TrainingInfo
+        {
+            get
+            {
+                return this.trainingInfo;
+            }
+            set
+            {
+                this.trainingInfo = value;
+                initAngleAnnotaions();
+            }
+        }
 
         /// <summary>
         /// ユーザーの関節角度を管理するコレクション
         /// Chartへ反映される
         /// </summary>
-        private ObservableCollection<GraphPoint> UserAngleCollection { get; set; }
+        private ObservableCollection<GraphPoint> UserAngleCollection { get; set; } = new ObservableCollection<GraphPoint>();
+
+        /// <summary>
+        /// 角度表示用のアノテーションへの参照を保持する
+        /// </summary>
+        private List<AngleAnnotation> AngleAnnotations { get; set; } = new List<AngleAnnotation>();
 
         /// <summary>
         /// フレームカウント
         /// </summary>
-        private int count = 0;
+        private int frameCount = 0;
+
+        /// <summary>
+        /// カウントダウン用
+        /// </summary>
+        private int countdown;
+
+        /// <summary>
+        /// カウントダウンに使用するタイマー
+        /// </summary>
+        private DispatcherTimer dispTimer;
 
         /// <summary>
         /// コンストラクタ
@@ -53,18 +87,25 @@ namespace FASystem
 
             // Init Kinect Sensors
             this.kinect = KinectSensor.GetDefault();
+
+            if (kinect == null)
+            {
+                this.showCloseDialog("Kinectが接続されていないか、利用できません。アプリケーションを終了します。");
+            }
+
             this.colorImageFormat = ColorImageFormat.Bgra;
             this.colorFrameDescription = this.kinect.ColorFrameSource.CreateFrameDescription(this.colorImageFormat);
             this.colorFrameReader = this.kinect.ColorFrameSource.OpenReader();
             this.colorFrameReader.FrameArrived += ColorFrameReader_FrameArrived;
             bodyFrameReader = kinect.BodyFrameSource.OpenReader();
             bodyFrameReader.FrameArrived += bodyFrameReader_FrameArrived;
+
             this.kinect.Open();
             this.bodies = this.bodies = new Body[kinect.BodyFrameSource.BodyCount];
 
-            this.UserAngleCollection = new ObservableCollection<GraphPoint>();
+            KinectRegion.SetKinectRegion(this, kinectRegion);
+            this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
         }
-
 
         /// <summary>
         /// Kinectセンサーからのカラー画像のハンドリング
@@ -73,7 +114,7 @@ namespace FASystem
         /// <param name="e"></param>
         private void ColorFrameReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
-         
+
             ColorFrame colorFrame = e.FrameReference.AcquireFrame();
 
             // フレームが上手く取得出来ない場合がある。
@@ -97,24 +138,9 @@ namespace FASystem
                                                             colors,
                                                             this.colorFrameDescription.Width * (int)this.colorFrameDescription.BytesPerPixel);
 
-            //リサイズ
-            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / bitmapSource.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
-            //TransformedBitmap tbBitmap = new TransformedBitmap(bitmapSource, scale);
-            /*
-            CroppedBitmap croppedBitmap = new CroppedBitmap(bitmapSource,new Int32Rect(this.colorFrameDescription.Width / 2 - this.colorFrameDescription.Width / 2,
-                                                                                       this.colorFrameDescription.Height / 2 - this.colorFrameDescription.Height / 2,
-                                                                                       (int)this.cameraCanvas.ActualWidth,
-                                                                                       (int)this.cameraCanvas.ActualHeight));
-            
-            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / croppedBitmap.PixelWidth), (this.cameraCanvas.ActualHeight / bitmapSource.PixelHeight));
-
-            */
-
-            Console.WriteLine(this.cameraCanvas.ActualWidth);
-            Console.WriteLine(this.cameraCanvas.ActualHeight);
+            this.cropBitmap(ref bitmapSource);
 
             //キャンバスに表示する
-            //this.cameraCanvas.Background = new ImageBrush(bitmapSource);
             this.cameraCanvas.Background = new ImageBrush(bitmapSource);
 
             //取得したフレームを放棄する
@@ -131,12 +157,12 @@ namespace FASystem
         {
             if (this.TrainingInfo == null) return;
 
-            count++;
+            frameCount++;
 
-            if (count == this.TrainingInfo.RangeTrackingTargets.First().Tempo.getAllFrame())
+            if (frameCount == this.TrainingInfo.RangeTrackingTargets.First().Tempo.getAllFrame())
             {
                 this.UserAngleCollection.Clear();
-                count = 0;
+                frameCount = 0;
             }
 
             using (var bodyFrame = e.FrameReference.AcquireFrame())
@@ -152,10 +178,17 @@ namespace FASystem
                 //ボディがトラッキングできている
                 foreach (var body in bodies.Where(b => b.IsTracked))
                 {
-
                     // TrainingInfoを利用して原点と２つのベクトルから角度を求める
                     foreach (var trackingTarget in this.TrainingInfo.RangeTrackingTargets)
                     {
+                        // 角度アノテーションの表示・座標の調整
+                        AngleAnnotation annotation = this.AngleAnnotations.Where(ant => ant.trackingTarget.Origin == trackingTarget.Origin).First();
+                        ColorSpacePoint colorPoint = this.kinect.CoordinateMapper.MapCameraPointToColorSpace(body.Joints[trackingTarget.Origin].Position);
+                        Canvas.SetLeft(annotation, colorPoint.X / 2 - annotation.ActualWidth);
+                        Canvas.SetTop(annotation, colorPoint.Y / 2 - annotation.ActualHeight);
+
+
+                        //ベクトル計算してグラフに反映する。ただし、isManegeTempoプロパティがTrueのオブジェクトのみ。
                         CameraSpacePoint origin = new CameraSpacePoint();
                         CameraSpacePoint position1 = new CameraSpacePoint();
                         CameraSpacePoint position2 = new CameraSpacePoint();
@@ -172,91 +205,93 @@ namespace FASystem
                             origin = body.Joints[trackingTarget.Origin].Position;
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
                             position2 = body.Joints[trackingTarget.Vector[1]].Position;
-
-                     
                         }
 
-                        if (trackingTarget.PlaneType == Enum.PlaneType.CoronalPlane)
-                        {
-                            // use X,Y
-                            var vectorX1 = position1.X - origin.X;
-                            var vectorY1 = position1.Y - origin.Y;
-                            var vectorX2 = position2.X - origin.X;
-                            var vectorY2 = position2.Y - origin.Y;
+                        
+                        
 
-                            var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
-                                ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2,2))));
-                            var angle = Math.Acos(cos);
-                            Console.WriteLine("CoronalPlane. Angle ->" + Utility.radToPI(angle) + "°");
+                        Vector vector1 = new Vector();
+                        Vector vector2 = new Vector();
+                        double cos;
+                        double angle;
+                        GraphPoint graphPoint;
+
+                        switch (trackingTarget.PlaneType)
+                        {                            
+                            case PlaneType.CoronalPlane:
+                                // X,Y
+                                vector1.X = position1.X - origin.X;
+                                vector1.Y = position1.Y - origin.Y;
+                                vector2.X = position2.X - origin.X;
+                                vector2.Y = position2.Y - origin.Y;
+
+                                cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
+                                    ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
+                                angle = Math.Acos(cos);
+                                graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
+                                this.UserAngleCollection.Add(graphPoint);
+#if DEBUG 
+                                Console.WriteLine("CoronalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
+#endif
+
+                                break;
+                            case PlaneType.SagittalPlane:
+                                // Y,Z
+                                vector1.X = position1.Y - origin.Y;
+                                vector1.Y = position1.Z - origin.Z;
+                                vector2.X = position2.Y - origin.Y;
+                                vector2.Y= position2.Z - origin.Z;
+
+                                cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
+                                    ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
+                                angle = Math.Acos(cos);
+                                graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
+
+
+                                if (trackingTarget.isManageTempo == true)
+                                {
+                                    this.UserAngleCollection.Add(graphPoint);
+
+                                }
+
+                                //this.AngleAnnotations.First().Angle = (int)Utility.radToDegree(angle);
+
+                                var angleAnnotation = this.AngleAnnotations.Where(an => an.trackingTarget.Origin == trackingTarget.Origin).First();
+                                angleAnnotation.Angle = (int)Utility.radToDegree(angle);
+
+#if DEBUG
+                                Console.WriteLine("SagittalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
+#endif
+                                
+                                break;
+                            case PlaneType.TransversePlane:
+                                // X,Z
+                                vector1.X = position1.Y - origin.Y;
+                                vector1.Y = position1.Z - origin.Z;
+                                vector2.X = position2.Y - origin.Y;
+                                vector2.Y = position2.Z - origin.Z;
+
+                                cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
+                                                                    ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
+                                angle = Math.Acos(cos);
+                                graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
+                                this.UserAngleCollection.Add(graphPoint);
+
+#if DEBUG
+                                Console.WriteLine("TransversePlane...Angle ->" + Utility.radToDegree(angle) + "°");
+#endif
+                                break;
+                            default:
+                                break;
                         }
-                        else if (trackingTarget.PlaneType == Enum.PlaneType.SagittalPlane)
-                        {
-                            // use Y,Z
-                            var vectorY1 = position1.Y - origin.Y;
-                            var vectorZ1 = position1.Z - origin.Z;
-                            var vectorY2 = position2.Y - origin.Y;
-                            var vectorZ2 = position2.Z - origin.Z;
+                    }
 
-                            var cos = (vectorY1 * vectorY2 + vectorZ1 * vectorZ2) /
-                                ((Math.Sqrt(Math.Pow(vectorY1, 2) + Math.Pow(vectorZ1, 2)) * Math.Sqrt(Math.Pow(vectorY2, 2) + Math.Pow(vectorZ2, 2))));
-                            var angle = Math.Acos(cos);
-                            Console.WriteLine("SagittalPlane. Angle ->" + Utility.radToPI(angle) + "°");
-                            GraphPoint point = new GraphPoint(count, (int)Utility.radToPI(angle));
-                            this.UserAngleCollection.Add(point);
-                        }
-                        else if (trackingTarget.PlaneType == Enum.PlaneType.TransversePlane)
-                        {
-                            // use X,Z
-                            var vectorX1 = position1.X - origin.X;
-                            var vectorY1 = position1.Z - origin.Z;
-                            var vectorX2 = position2.X - origin.X;
-                            var vectorY2 = position2.Z - origin.Z;
-
-                            var cos = (vectorX1 * vectorY1 + vectorX2 * vectorY2) /
-                                ((Math.Sqrt(Math.Pow(vectorX1, 2) + Math.Pow(vectorY1, 2)) * Math.Sqrt(Math.Pow(vectorX2, 2) + Math.Pow(vectorY2, 2))));
-
-                            var angle = Math.Acos(cos);
-
-                            Console.WriteLine("Angle ->" + Utility.radToPI(angle) + "°");
-                        }
-                    
-                        /*
-                        // テスト用に右肘を原点、右手首と右肩をベクトルとして角度を求める
-                        // 角度を求めて,UserAngleCollectionへAdd
-
-
-                        // 右手首の座標を取得
-                        var rightWristX = body.Joints[JointType.WristRight].Position.X;
-                        var rightWristY = body.Joints[JointType.WristRight].Position.Y;
-                        // 右肘の座標を取得 （原点 - B )
-                        var rightElbowX = body.Joints[JointType.ElbowRight].Position.X;
-                        var rightElbowY = body.Joints[JointType.ElbowRight].Position.Y;
-                        // 右肩の座標を取得
-                        var rightShoulderX = body.Joints[JointType.ShoulderRight].Position.X;
-                        var rightShoulderY = body.Joints[JointType.ShoulderRight].Position.Y;
-
-                        var wristVectorX = rightWristX - rightElbowX;
-                        var wristVectorY = rightWristY - rightElbowY;
-
-                        var shoulderVectorX = rightShoulderX - rightElbowX;
-                        var shoulderVectorY = rightShoulderY - rightElbowY;
-
-                        var cos = (wristVectorX * wristVectorY + shoulderVectorX * shoulderVectorY) /
-                            ((Math.Sqrt(Math.Pow(wristVectorX, 2) + Math.Pow(wristVectorY, 2)) * Math.Sqrt(Math.Pow(shoulderVectorX, 2) + Math.Pow(shoulderVectorY, 2))));
-
-                        var angle = Math.Acos(cos);
-                        Console.WriteLine(angle);
-                        */
+                    //固定点
+                    foreach (var fixTarget in this.TrainingInfo.FixTrackingTargets)
+                    {
 
                     }
 
-                   
-                    /*
-                    var angle = Utility.radToPI(Math.Acos(cos));
-                    
-                    GraphPoint point = new GraphPoint(count, (int)angle);
-                    this.UserAngleCollection.Add(point);
-                    */
                 }
             }
         }
@@ -295,6 +330,15 @@ namespace FASystem
         }
 
         /// <summary>
+        /// 設定ウィンドウを表示する
+        /// </summary>
+        private void showSettingWindow()
+        {
+            //Window settingWindow = new SettingWindow();
+            //settingWindow.Show();
+        }
+
+        /// <summary>
         /// Windowが描画されたときに呼ばれる
         /// </summary>
         /// <param name="sender"></param>
@@ -312,28 +356,181 @@ namespace FASystem
         /// </summary>
         public void initChart()
         {
-            // Init Chart - Data Binding
-            //this.ChartLeft.Series.First().DataContext = this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection();
-            //this.ChartLeft.Series.Last().DataContext = this.UserAngleCollection;
-            var teachSeries = new EnumerableDataSource<GraphPoint>(this.TrainingInfo.RangeTrackingTargets.First().generateBindingGraphCollection());
+            const int GRAPH_MARGIN = 20;
+            const int TEACH_BORDER_THICKNESS = 8;
+            const int USER_BORDER_THICKNESS = 6;
+
+            // Init Chart
+            plotter.Children.RemoveAll((typeof(LineGraph)));
+
+            //教則
+            var managedTarget = this.TrainingInfo.RangeTrackingTargets.Where(tar => tar.isManageTempo == true).First();
+            var teachSeries = new EnumerableDataSource<GraphPoint>(managedTarget.generateBindingGraphCollection());
+
             teachSeries.SetXMapping(x => x.X);
             teachSeries.SetYMapping(y => y.Y);
-            plotter.AddLineGraph(teachSeries, Colors.Red, 2);
+            plotter.AddLineGraph(teachSeries, Colors.Red, TEACH_BORDER_THICKNESS);
 
+            //ユーザ
             var userAngleSeries = new EnumerableDataSource<GraphPoint>(this.UserAngleCollection);
+
             userAngleSeries.SetXMapping(x => x.X);
             userAngleSeries.SetYMapping(y => y.Y);
-            plotter.AddLineGraph(userAngleSeries, Colors.Green, 2);
+            plotter.AddLineGraph(userAngleSeries, Colors.LightGreen, USER_BORDER_THICKNESS);
 
-
-            // Init Chart Widthdd
-            RangeTrackingTarget target = this.TrainingInfo.RangeTrackingTargets.First();
-            //this.ChartLeft.MaxWidth = target.Tempo.getAllFrame();
+            // 高さ固定
+            this.setYAxisRange((int)managedTarget.PermissibleRangeInTop.calcAverage() - GRAPH_MARGIN, (int)managedTarget.PermissibleRangeInBottom.calcAverage() + GRAPH_MARGIN);
+            plotter.LegendVisible = false;
         }
 
+
+        /// <summary>
+        ///　映像表示部の切取り処理
+        /// </summary>
+        private void cropBitmap(ref BitmapSource source)
+        {
+            //リサイズ
+            //ScaleTransform scale = new ScaleTransform((this.cameraCanvas.ActualWidth / source.PixelWidth), (this.cameraCanvas.ActualHeight / source.PixelHeight));
+            //TransformedBitmap tbBitmap = new TransformedBitmap(source, scale);
+            /*
+            source = new CroppedBitmap(source, new Int32Rect(this.colorFrameDescription.Width / 2 - (int)this.cameraCanvas.ActualWidth / 2,
+                                                             this.colorFrameDescription.Height / 2 - (int)this.cameraCanvas.ActualHeight / 2,
+                                                             (int)this.cameraCanvas.ActualWidth,
+                                                             (int)this.cameraCanvas.ActualHeight));
+                                                             */
+        }
+
+        /// <summary>
+        /// アプリ起動時にKinectが利用できない場合に表示するダイアログ
+        /// </summary>
+        /// <param name="message"></param>
+        private void showCloseDialog(string message)
+        {
+            string caption = "メッセージ";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBoxResult result = MessageBox.Show(message, caption, button, icon);
+
+            if (result == MessageBoxResult.OK)
+            {
+                Environment.Exit(0);
+            }
+        }
+
+        /// <summary>
+        /// ChartのY軸を固定する
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        private void setYAxisRange(int min, int max)
+        {
+            ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
+            restr.YRange = new DisplayRange(min, max);
+            plotter.Viewport.Restrictions.Add(restr);
+        }
+
+        /// <summary>
+        /// トレーニングセレクトボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void trainingSelectButton_Click(object sender, RoutedEventArgs e)
         {
             this.showTrainingSelectWindow();
+        }
+
+        /// <summary>
+        /// 角度表示用アノテーションの初期化
+        /// </summary>
+        private void initAngleAnnotaions()
+        {
+            foreach (var target in this.TrainingInfo.RangeTrackingTargets)
+            {
+                AngleAnnotation annotation = new AngleAnnotation(target);
+                this.AngleAnnotations.Add(annotation);
+                this.cameraCanvas.Children.Add(annotation);
+            }
+        }
+
+        /// <summary>
+        /// トレーニング開始ボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void trainingStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            // カウントダウンを開始する
+            this.messageTextBlock.Text = "カウントダウンを開始します";
+
+            dispTimer = new DispatcherTimer();
+            dispTimer.Tick += DispTimer_Countdown;
+            dispTimer.Interval = new TimeSpan(0, 0, 1);
+            dispTimer.Start();
+
+            this.countdown = 6;
+        }
+
+        /// <summary>
+        /// カウントダウンのハンドリング
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DispTimer_Countdown(object sender, EventArgs e)
+        {
+            this.countdown--;
+
+            if (this.countdown == 0 || this.countdown == -1)
+            {
+                this.messageTextBlock.Text = "トレーニングを開始してください";
+            } else if (this.countdown == -2)
+            {
+                this.messageTextBlock.Text = "トレーニング中...";
+                this.dispTimer.Stop();
+            } else
+            {
+                this.messageTextBlock.Text = this.countdown.ToString();
+            }
+        }
+
+        /// <summary>
+        /// トレーニング終了時のハンドリング
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DispTimer_TrainingFinished(object sender, EventArgs e)
+        {
+            this.countdown--;
+
+            if (this.countdown == 0)
+            {
+                this.messageTextBlock.Text = "開始ボタンを押してください";
+                this.dispTimer.Stop();
+            }
+        }
+
+        /// <summary>
+        /// トレーニング終了時の処理
+        /// </summary>
+        private void finishedTraining()
+        {
+            this.messageTextBlock.Text = "トレーニング終了です。お疲れ様でした。";
+
+            dispTimer = new DispatcherTimer();
+            dispTimer.Tick += DispTimer_TrainingFinished;
+            dispTimer.Interval = new TimeSpan(0, 0, 1);
+            dispTimer.Start();
+
+            this.countdown = 2;
+        }
+
+        /// <summary>
+        /// トレーニング終了ボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void trainingEndButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.finishedTraining();
         }
     }
 }
