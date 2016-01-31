@@ -1,97 +1,182 @@
 ﻿{
-  "trainingName": "アームカール（右腕）",
-
-
-  "rangeTrackingTargets": [
+  "trainingInfos": [
     {
-      "isUseUnitVector": false,
-      "isManageTempo": true,
+      "trainingName": "バイセップカール",
 
-      "permissibleRangeInBottom": {
-        "start": 170,
-        "end": 160
-      },
 
-      "prohibitedRangeInBottom": {
-        "end": 171,
-        "start": 180
-      },
+      "rangeTrackingTargets": [
+        {
+          "isUseUnitVector": false,
+          "isManageTempo": true,
+          "unitVector": {
+            "x": 0,
+            "y": 0
+          },
 
-      "permissibleRangeInTop": {
-        "start": 40,
-        "end": 50
-      },
+          "permissibleRangeInBottom": {
+            "start": 170,
+            "end": 160
+          },
 
-      "prohibitedRangeInTop": {
-        "start": 10,
-        "end": 20
-      },
+          "prohibitedRangeInBottom": {
+            "end": 171,
+            "start": 180
+          },
 
-      "tempo": {
-        "restTimeInBottom": 0.5,
-        "restTimeInTop": 0.5,
-        "downwardMovementTime": 2.0,
-        "riseMovementTime": 1.0
-      },
+          "permissibleRangeInTop": {
+            "start": 40,
+            "end": 50
+          },
 
-      "planeType": "SagittalPlane",
-      "origin": "ElbowRight",
-      "vector": [
-        "WristRight",
-        "ShoulderRight"
+          "prohibitedRangeInTop": {
+            "start": 10,
+            "end": 20
+          },
+
+          "tempo": {
+            "restTimeInBottom": 0.5,
+            "restTimeInTop": 0.5,
+            "downwardMovementTime": 2.0,
+            "riseMovementTime": 1.0
+          },
+
+          "planeType": "SagittalPlane",
+          "origin": "ElbowRight",
+          "vector": [
+            "WristRight",
+            "ShoulderRight"
+          ]
+        },
+        {
+          "isUseUnitVector": false,
+          "isManageTempo": false,
+
+          "permissibleRangeInBottom": {
+            "start": 170,
+            "end": 160
+          },
+
+          "prohibitedRangeInBottom": {
+            "end": 171,
+            "start": 180
+          },
+
+          "permissibleRangeInTop": {
+            "start": 40,
+            "end": 50
+          },
+
+          "prohibitedRangeInTop": {
+            "start": 10,
+            "end": 20
+          },
+
+          "tempo": {
+            "restTimeInBottom": 1.0,
+            "restTimeInTop": 0.5,
+            "downwardMovementTime": 3.0,
+            "riseMovementTime": 1.0
+          },
+
+          "planeType": "SagittalPlane",
+          "origin": "ElbowLeft",
+          "vector": [
+            "WristLeft",
+            "ShoulderLeft"
+          ]
+        }
       ]
     },
     {
-      "isUseUnitVector": false,
-      "isManageTempo": false,
+      "trainingName": "スクワット",
 
-      "permissibleRangeInBottom": {
-        "start": 170,
-        "end": 160
-      },
 
-      "prohibitedRangeInBottom": {
-        "end": 171,
-        "start": 180
-      },
+      "rangeTrackingTargets": [
+        {
+          "isUseUnitVector": true,
+          "isManageTempo": true,
+          "unitVector": {
+            "x": 0,
+            "y": -1
+          },
 
-      "permissibleRangeInTop": {
-        "start": 40,
-        "end": 50
-      },
+          "permissibleRangeInBottom": {
+            "start": 170,
+            "end": 160
+          },
 
-      "prohibitedRangeInTop": {
-        "start": 10,
-        "end": 20
-      },
+          "prohibitedRangeInBottom": {
+            "end": 171,
+            "start": 180
+          },
 
-      "tempo": {
-        "restTimeInBottom": 1.0,
-        "restTimeInTop": 0.5,
-        "downwardMovementTime": 3.0,
-        "riseMovementTime": 1.0
-      },
+          "permissibleRangeInTop": {
+            "start": 40,
+            "end": 50
+          },
 
-      "planeType": "SagittalPlane",
-      "origin": "ElbowLeft",
-      "vector": [
-        "WristLeft",
-        "ShoulderLeft"
+          "prohibitedRangeInTop": {
+            "start": 10,
+            "end": 20
+          },
+
+          "tempo": {
+            "restTimeInBottom": 0.5,
+            "restTimeInTop": 0.5,
+            "downwardMovementTime": 2.0,
+            "riseMovementTime": 1.0
+          },
+
+          "planeType": "SagittalPlane",
+          "origin": "KneeRight",
+          "vector": [
+            "HipRight",
+            "AnkleRight"
+          ]
+        },
+        {
+          "isUseUnitVector": true,
+          "isManageTempo": false,
+          "unitVector": {
+            "x": 0,
+            "y": -1
+          },
+
+          "permissibleRangeInBottom": {
+            "start": 30,
+            "end": 40
+          },
+
+          "prohibitedRangeInBottom": {
+            "end": 0,
+            "start": 0
+          },
+
+          "permissibleRangeInTop": {
+            "start": 170,
+            "end": 180
+          },
+
+          "prohibitedRangeInTop": {
+            "start": 0,
+            "end": 0
+          },
+
+          "tempo": {
+            "restTimeInBottom": 1.0,
+            "restTimeInTop": 0.5,
+            "downwardMovementTime": 3.0,
+            "riseMovementTime": 1.0
+          },
+
+          "planeType": "SagittalPlane",
+          "origin": "KneeLeft",
+          "vector": [
+            "HipLeft",
+            "AnkleLeft"
+          ]
+        }
       ]
-    }
-  ],
-
-  "fixTrackingTargets": [
-    {
-      "fixType": "UpAndDownFix",
-      "permissibleRange": 1.0,
-
-      "targetJoint": "AnkleLeft"
-    },
-    {
-      "fixType": "UpAndDownFix",
-      "permissibleRange": 1.0,
-      "targetJoint": "Head"
     }
   ]
 }

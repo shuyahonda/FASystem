@@ -18,8 +18,8 @@ namespace FASystem.Model
         /// <summary>
         /// 固定する関節を管理するリスト
         /// </summary>
-        [JsonProperty("fixTrackingTargets")]
-        public List<FixTrackingTarget> FixTrackingTargets { get; set; }
+        //[JsonProperty("fixTrackingTargets")]
+        //public List<FixTrackingTarget> FixTrackingTargets { get; set; }
 
         /// <summary>
         /// 角度範囲の追跡対象を管理するリスト

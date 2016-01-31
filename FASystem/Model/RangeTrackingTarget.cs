@@ -15,15 +15,23 @@ namespace FASystem.Model
         private const int kinectFPS = 30;
 
         /// <summary>
+        /// 単位ベクトル
+        /// </summary>
+        [JsonProperty("unitVector")]
+        public Vector UnitVector { get; set; }
+
+        /// <summary>
         /// 単位ベクトルを用いるかどうかのフラグ。
         /// トレーニングの種類によってはベクトルが必ず関節になるとは限らないため。
         /// </summary>
+        [JsonProperty("isUseUnitVector")]
         public Boolean isUseUnitVector { get; set; }
 
         /// <summary>
         /// テンポを管理するかどうかのフラグ。
         /// 角度だけをアノテーションで表示する場合はFalseにする。
         /// </summary>
+        [JsonProperty("isManageTempo")]
         public Boolean isManageTempo { get; set; }
    
         /// <summary>

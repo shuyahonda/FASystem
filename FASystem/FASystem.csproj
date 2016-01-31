@@ -102,6 +102,8 @@
     <Compile Include="Helper\Utility.cs" />
     <Compile Include="Model\GraphPoint.cs" />
     <Compile Include="Model\Reps.cs" />
+    <Compile Include="Model\TrainingInfos.cs" />
+    <Compile Include="Model\Vector.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

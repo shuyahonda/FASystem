@@ -194,24 +194,21 @@ namespace FASystem
                         CameraSpacePoint position2 = new CameraSpacePoint();
 
                         // ベクトルが一つであれば、単位ベクトルを利用して計算する
-                        if (trackingTarget.Vector.Count == 1)
+                        if (trackingTarget.isUseUnitVector)
                         {
                             origin = body.Joints[trackingTarget.Origin].Position;
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
                             position2 = body.Joints[trackingTarget.Vector[1]].Position;
                         }
-                        else if (trackingTarget.Vector.Count == 2)
+                        else
                         {
                             origin = body.Joints[trackingTarget.Origin].Position;
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
                             position2 = body.Joints[trackingTarget.Vector[1]].Position;
                         }
 
-                        
-                        
-
-                        Vector vector1 = new Vector();
-                        Vector vector2 = new Vector();
+                        Model.Vector vector1 = new Model.Vector();
+                        Model.Vector vector2 = new Model.Vector();
                         double cos;
                         double angle;
                         GraphPoint graphPoint;
@@ -285,13 +282,6 @@ namespace FASystem
                                 break;
                         }
                     }
-
-                    //固定点
-                    foreach (var fixTarget in this.TrainingInfo.FixTrackingTargets)
-                    {
-
-                    }
-
                 }
             }
         }

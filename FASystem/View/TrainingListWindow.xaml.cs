@@ -27,7 +27,7 @@ namespace FASystem
     {
         private const int DEFAULT_REPS = 8;
 
-        private List<TrainingInfo> trainingInfos;
+        private TrainingInfos trainingInfos;
 
         private int reps = DEFAULT_REPS;
 
@@ -55,8 +55,8 @@ namespace FASystem
             this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
 
             // Init Fields
-            this.trainingInfos = new List<TrainingInfo>();
-            trainingList.ItemsSource = trainingInfos;
+            //this.trainingInfos = new List<TrainingInfo>();
+            //trainingList.ItemsSource = trainingInfos.infos;
 
             // トレーニングリストを表示
             this.loadTrainingInfos();
@@ -94,18 +94,21 @@ namespace FASystem
             //TODO: あとで修正
             String text = System.Text.Encoding.UTF8.GetString(FASystem.Properties.Resources.Training);
 
-            Console.WriteLine(text);
+            //Console.WriteLine(text);
 
             text = text.Remove(0, 1);
 
 
             //TrainingModelを生成
 
-            var trainingInfo = JsonConvert.DeserializeObject<TrainingInfo>(text);
+            this.trainingInfos = JsonConvert.DeserializeObject<TrainingInfos>(text);
+            trainingList.ItemsSource = trainingInfos.infos;
 
-            this.trainingInfos.Add(trainingInfo);
 
-            Console.WriteLine(this.trainingInfos.First().TrainingName);
+
+            //this.trainingInfos.Add(trainingInfo);
+
+            // Console.WriteLine(this.trainingInfos.First().TrainingName);
         }
 
         /// <summary>
