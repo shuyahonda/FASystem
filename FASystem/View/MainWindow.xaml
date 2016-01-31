@@ -8,7 +8,7 @@
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:k="http://schemas.microsoft.com/kinect/2014"
         mc:Ignorable="d"
-        Title="FASystem" Height="900" Width="600" ContentRendered="Window_ContentRendered" WindowStartupLocation="CenterScreen" MinWidth="500" MinHeight="800">
+        Title="FASystem" Height="900" Width="850" ContentRendered="Window_ContentRendered" WindowStartupLocation="CenterScreen" MinWidth="500" MinHeight="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>

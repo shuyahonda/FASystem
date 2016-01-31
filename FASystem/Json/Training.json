@@ -28,9 +28,9 @@
       },
 
       "tempo": {
-        "restTimeInBottom": 1.0,
+        "restTimeInBottom": 0.5,
         "restTimeInTop": 0.5,
-        "downwardMovementTime": 3.0,
+        "downwardMovementTime": 2.0,
         "riseMovementTime": 1.0
       },
 
