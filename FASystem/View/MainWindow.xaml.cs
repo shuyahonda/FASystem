@@ -193,12 +193,12 @@ namespace FASystem
                         CameraSpacePoint position1 = new CameraSpacePoint();
                         CameraSpacePoint position2 = new CameraSpacePoint();
 
+                        
                         // ベクトルが一つであれば、単位ベクトルを利用して計算する
                         if (trackingTarget.isUseUnitVector)
                         {
                             origin = body.Joints[trackingTarget.Origin].Position;
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
-                            position2 = body.Joints[trackingTarget.Vector[1]].Position;
                         }
                         else
                         {
@@ -206,7 +206,7 @@ namespace FASystem
                             position1 = body.Joints[trackingTarget.Vector[0]].Position;
                             position2 = body.Joints[trackingTarget.Vector[1]].Position;
                         }
-
+                        
                         Model.Vector vector1 = new Model.Vector();
                         Model.Vector vector2 = new Model.Vector();
                         double cos;
@@ -219,8 +219,17 @@ namespace FASystem
                                 // X,Y
                                 vector1.X = position1.X - origin.X;
                                 vector1.Y = position1.Y - origin.Y;
-                                vector2.X = position2.X - origin.X;
-                                vector2.Y = position2.Y - origin.Y;
+
+                                if (trackingTarget.isUseUnitVector)
+                                {
+                                    vector2.X = origin.X + trackingTarget.UnitVector.X;
+                                    vector2.Y = origin.Y + trackingTarget.UnitVector.Y;
+                                } else
+                                {
+                                    vector2.X = position2.X - origin.X;
+                                    vector2.Y = position2.Y - origin.Y;
+                                }
+                              
 
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
@@ -234,10 +243,25 @@ namespace FASystem
                                 break;
                             case PlaneType.SagittalPlane:
                                 // Y,Z
-                                vector1.X = position1.Y - origin.Y;
-                                vector1.Y = position1.Z - origin.Z;
-                                vector2.X = position2.Y - origin.Y;
-                                vector2.Y= position2.Z - origin.Z;
+                                vector1.X = position1.Z - origin.Z;
+                                vector1.Y = position1.Y - Math.Abs(origin.Y);
+
+                                if (trackingTarget.isUseUnitVector)
+                                {
+                                    Console.WriteLine("isUseUnitVector");
+                                    vector2.X = origin.Z + trackingTarget.UnitVector.X;
+                                    vector2.Y = origin.Y + trackingTarget.UnitVector.Y;
+                                }
+                                else
+                                {
+                                    vector2.X = position2.Y - Math.Abs(origin.Y);
+                                    vector2.Y = position2.Z - Math.Abs(origin.Z);
+                                }
+
+
+
+                                Console.WriteLine("vector2.X : " + vector2.X + " vector2.Y : " + vector2.Y);
+                                
 
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));

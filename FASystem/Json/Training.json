@@ -130,8 +130,7 @@
           "planeType": "SagittalPlane",
           "origin": "KneeRight",
           "vector": [
-            "HipRight",
-            "AnkleRight"
+            "HipRight"
           ]
         },
         {
@@ -172,8 +171,7 @@
           "planeType": "SagittalPlane",
           "origin": "KneeLeft",
           "vector": [
-            "HipLeft",
-            "AnkleLeft"
+            "HipLeft"
           ]
         }
       ]
