@@ -229,60 +229,45 @@ namespace FASystem
                                     vector2.X = position2.X - origin.X;
                                     vector2.Y = position2.Y - origin.Y;
                                 }
-                              
 
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
                                 angle = Math.Acos(cos);
                                 graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
-                                this.UserAngleCollection.Add(graphPoint);
-#if DEBUG 
-                                Console.WriteLine("CoronalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
-#endif
+
+                                if (trackingTarget.isManageTempo)
+                                {
+                                    this.UserAngleCollection.Add(graphPoint);
+                                }
 
                                 break;
                             case PlaneType.SagittalPlane:
                                 // Y,Z
                                 vector1.X = position1.Z - origin.Z;
-                                vector1.Y = position1.Y - Math.Abs(origin.Y);
+                                vector1.Y = position1.Y - origin.Y;
 
                                 if (trackingTarget.isUseUnitVector)
                                 {
-                                    Console.WriteLine("isUseUnitVector");
                                     vector2.X = origin.Z + trackingTarget.UnitVector.X;
                                     vector2.Y = origin.Y + trackingTarget.UnitVector.Y;
                                 }
                                 else
                                 {
-                                    vector2.X = position2.Y - Math.Abs(origin.Y);
-                                    vector2.Y = position2.Z - Math.Abs(origin.Z);
-                                }
-
-
-
-                                Console.WriteLine("vector2.X : " + vector2.X + " vector2.Y : " + vector2.Y);
-                                
+                                    vector2.X = position2.Z + origin.Z;
+                                    vector2.Y = position2.Y + origin.Y;
+                                }                                
 
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
                                 angle = Math.Acos(cos);
                                 graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
 
-
                                 if (trackingTarget.isManageTempo == true)
                                 {
                                     this.UserAngleCollection.Add(graphPoint);
-
                                 }
 
-                                //this.AngleAnnotations.First().Angle = (int)Utility.radToDegree(angle);
-
-                                var angleAnnotation = this.AngleAnnotations.Where(an => an.trackingTarget.Origin == trackingTarget.Origin).First();
-                                angleAnnotation.Angle = (int)Utility.radToDegree(angle);
-
-#if DEBUG
-                                Console.WriteLine("SagittalPlane...Angle ->" + Utility.radToDegree(angle) + "°");
-#endif
+                                annotation.Angle = (int)Utility.radToDegree(angle);
                                 
                                 break;
                             case PlaneType.TransversePlane:
@@ -296,11 +281,14 @@ namespace FASystem
                                                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
                                 angle = Math.Acos(cos);
                                 graphPoint = new GraphPoint(frameCount, (int)Utility.radToDegree(angle));
-                                this.UserAngleCollection.Add(graphPoint);
 
-#if DEBUG
-                                Console.WriteLine("TransversePlane...Angle ->" + Utility.radToDegree(angle) + "°");
-#endif
+                                if (trackingTarget.isManageTempo)
+                                {
+                                    this.UserAngleCollection.Add(graphPoint);
+                                }
+
+                                annotation.Angle = (int)Utility.radToDegree(angle);
+
                                 break;
                             default:
                                 break;
