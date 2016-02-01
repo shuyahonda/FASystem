@@ -96,8 +96,8 @@
           "isUseUnitVector": true,
           "isManageTempo": true,
           "unitVector": {
-            "x": 0,
-            "y": -1
+            "x": 0.0,
+            "y": -1.0
           },
 
           "permissibleRangeInBottom": {
@@ -137,8 +137,8 @@
           "isUseUnitVector": true,
           "isManageTempo": false,
           "unitVector": {
-            "x": 0,
-            "y": -1
+            "x": 0.0,
+            "y": -1.0
           },
 
           "permissibleRangeInBottom": {
@@ -172,6 +172,186 @@
           "origin": "KneeLeft",
           "vector": [
             "HipLeft"
+          ]
+        }
+      ]
+    },
+    {
+      "trainingName": "ショルダーフライ",
+
+
+      "rangeTrackingTargets": [
+        {
+          "isUseUnitVector": true,
+          "isManageTempo": true,
+          "unitVector": {
+            "x": 0.0,
+            "y": -1.0
+          },
+
+          "permissibleRangeInBottom": {
+            "start": 170,
+            "end": 160
+          },
+
+          "prohibitedRangeInBottom": {
+            "end": 171,
+            "start": 180
+          },
+
+          "permissibleRangeInTop": {
+            "start": 40,
+            "end": 50
+          },
+
+          "prohibitedRangeInTop": {
+            "start": 10,
+            "end": 20
+          },
+
+          "tempo": {
+            "restTimeInBottom": 0.5,
+            "restTimeInTop": 0.5,
+            "downwardMovementTime": 2.0,
+            "riseMovementTime": 1.0
+          },
+
+          "planeType": "CoronalPlane",
+          "origin": "ShoulderRight",
+          "vector": [
+            "ElbowRight"
+          ]
+        },
+        {
+          "isUseUnitVector": true,
+          "isManageTempo": false,
+          "unitVector": {
+            "x": 0.0,
+            "y": -1.0
+          },
+
+          "permissibleRangeInBottom": {
+            "start": 170,
+            "end": 160
+          },
+
+          "prohibitedRangeInBottom": {
+            "end": 171,
+            "start": 180
+          },
+
+          "permissibleRangeInTop": {
+            "start": 40,
+            "end": 50
+          },
+
+          "prohibitedRangeInTop": {
+            "start": 10,
+            "end": 20
+          },
+
+          "tempo": {
+            "restTimeInBottom": 1.0,
+            "restTimeInTop": 0.5,
+            "downwardMovementTime": 3.0,
+            "riseMovementTime": 1.0
+          },
+
+          "planeType": "CoronalPlane",
+          "origin": "ShoulderLeft",
+          "vector": [
+            "ElbowLeft"
+          ]
+        }
+      ]
+    },
+     {
+      "trainingName": "ベントアームサイドレイズ",
+
+
+      "rangeTrackingTargets": [
+        {
+          "isUseUnitVector": false,
+          "isManageTempo": true,
+          "unitVector": {
+            "x": 0.0,
+            "y": -1.0
+          },
+
+          "permissibleRangeInBottom": {
+            "start": 170,
+            "end": 160
+          },
+
+          "prohibitedRangeInBottom": {
+            "end": 171,
+            "start": 180
+          },
+
+          "permissibleRangeInTop": {
+            "start": 40,
+            "end": 50
+          },
+
+          "prohibitedRangeInTop": {
+            "start": 10,
+            "end": 20
+          },
+
+          "tempo": {
+            "restTimeInBottom": 0.5,
+            "restTimeInTop": 0.5,
+            "downwardMovementTime": 2.0,
+            "riseMovementTime": 1.0
+          },
+
+          "planeType": "TransversePlane",
+          "origin": "ElbowLeft",
+          "vector": [
+            "ShoulderRight",
+            "WristRight"
+          ]
+        },
+        {
+          "isUseUnitVector": false,
+          "isManageTempo": false,
+          "unitVector": {
+            "x": 0.0,
+            "y": -1.0
+          },
+
+          "permissibleRangeInBottom": {
+            "start": 170,
+            "end": 160
+          },
+
+          "prohibitedRangeInBottom": {
+            "end": 171,
+            "start": 180
+          },
+
+          "permissibleRangeInTop": {
+            "start": 40,
+            "end": 50
+          },
+
+          "prohibitedRangeInTop": {
+            "start": 10,
+            "end": 20
+          },
+
+          "tempo": {
+            "restTimeInBottom": 1.0,
+            "restTimeInTop": 0.5,
+            "downwardMovementTime": 3.0,
+            "riseMovementTime": 1.0
+          },
+
+          "planeType": "TransversePlane",
+          "origin": "ElbowLeft",
+          "vector": [
+            "ShoulderLeft",
+            "WristLeft"
           ]
         }
       ]

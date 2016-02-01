@@ -5,14 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FASystem.CustomControl"
              xmlns:c="clr-namespace:FASystem.Converter"
-             mc:Ignorable="d" Height="50" Width="100">
-   
+             mc:Ignorable="d" Height="40" Width="70">
+
     <UserControl.Resources>
         <c:IntToAngleConverter x:Key="converter" />
     </UserControl.Resources>
-    
+
     <Grid>
-        <Border x:Name="AnnotationBack" BorderBrush="#FF6E6E6E" BorderThickness="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="100" Background="#FFC6B8B8"/>
+        <Border x:Name="AnnotationBack" BorderBrush="#FF6E6E6E" BorderThickness="1" Background="#FFC6B8B8" Margin="0,0,0,0.286"/>
         <TextBlock x:Name="AngleText" Margin="0,0,0,0.286" TextWrapping="Wrap" Text="{Binding Angle,Converter={StaticResource converter}}" FontSize="29.333" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <Line Fill="#FFDED1D1" Stroke="Tomato" StrokeThickness="3" />
     </Grid>

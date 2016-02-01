@@ -222,8 +222,8 @@ namespace FASystem
 
                                 if (trackingTarget.isUseUnitVector)
                                 {
-                                    vector2.X = origin.X + trackingTarget.UnitVector.X;
-                                    vector2.Y = origin.Y + trackingTarget.UnitVector.Y;
+                                    vector2.X = trackingTarget.UnitVector.X - origin.X;
+                                    vector2.Y = trackingTarget.UnitVector.Y - origin.Y;
                                 } else
                                 {
                                     vector2.X = position2.X - origin.X;
@@ -240,6 +240,9 @@ namespace FASystem
                                     this.UserAngleCollection.Add(graphPoint);
                                 }
 
+                                annotation.Angle = (int)Utility.radToDegree(angle);
+
+
                                 break;
                             case PlaneType.SagittalPlane:
                                 // Y,Z
@@ -248,13 +251,13 @@ namespace FASystem
 
                                 if (trackingTarget.isUseUnitVector)
                                 {
-                                    vector2.X = origin.Z + trackingTarget.UnitVector.X;
-                                    vector2.Y = origin.Y + trackingTarget.UnitVector.Y;
+                                    vector2.X = trackingTarget.UnitVector.X - origin.Y;
+                                    vector2.Y = trackingTarget.UnitVector.Y - origin.Z;
                                 }
                                 else
                                 {
-                                    vector2.X = position2.Z + origin.Z;
-                                    vector2.Y = position2.Y + origin.Y;
+                                    vector2.X = position2.Z - origin.Z;
+                                    vector2.Y = position2.Y - origin.Y;
                                 }                                
 
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
@@ -274,8 +277,18 @@ namespace FASystem
                                 // X,Z
                                 vector1.X = position1.Y - origin.Y;
                                 vector1.Y = position1.Z - origin.Z;
-                                vector2.X = position2.Y - origin.Y;
-                                vector2.Y = position2.Z - origin.Z;
+
+                                if (trackingTarget.isUseUnitVector)
+                                {
+                                    vector2.X = trackingTarget.UnitVector.X - origin.Z;
+                                    vector2.Y = trackingTarget.UnitVector.Y - origin.Y;
+                                }
+                                else
+                                {
+                                    vector2.X = position2.Y - origin.Y;
+                                    vector2.Y = position2.Z - origin.Z;
+                                }
+
 
                                 cos = (vector1.X * vector2.X + vector1.Y * vector2.Y) /
                                                                     ((Math.Sqrt(Math.Pow(vector1.X, 2) + Math.Pow(vector1.Y, 2)) * Math.Sqrt(Math.Pow(vector2.X, 2) + Math.Pow(vector2.Y, 2))));
@@ -329,6 +342,7 @@ namespace FASystem
         {
             Window selectWindow = new TrainingListWindow();
             selectWindow.Show();
+            
         }
 
         /// <summary>
@@ -362,9 +376,13 @@ namespace FASystem
             const int TEACH_BORDER_THICKNESS = 8;
             const int USER_BORDER_THICKNESS = 6;
 
-            // Init Chart
-            plotter.Children.RemoveAll((typeof(LineGraph)));
+            this.AngleAnnotations.Clear();
 
+            // Init Chart
+            if (plotter.Children.Count != 0)
+            {
+                plotter.Children.RemoveAll((typeof(LineGraph)));
+            }
             //教則
             var managedTarget = this.TrainingInfo.RangeTrackingTargets.Where(tar => tar.isManageTempo == true).First();
             var teachSeries = new EnumerableDataSource<GraphPoint>(managedTarget.generateBindingGraphCollection());
