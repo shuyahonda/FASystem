@@ -176,7 +176,8 @@ namespace FASystem
                 bodyFrame.GetAndRefreshBodyData(bodies);
 
                 //ボディがトラッキングできている
-                foreach (var body in bodies.Where(b => b.IsTracked))
+                foreach (
+                    var body in bodies.Where(b => b.IsTracked))
                 {
                     // TrainingInfoを利用して原点と２つのベクトルから角度を求める
                     foreach (var trackingTarget in this.TrainingInfo.RangeTrackingTargets)
@@ -376,13 +377,9 @@ namespace FASystem
             const int TEACH_BORDER_THICKNESS = 8;
             const int USER_BORDER_THICKNESS = 6;
 
-            this.AngleAnnotations.Clear();
-
             // Init Chart
-            if (plotter.Children.Count != 0)
-            {
-                plotter.Children.RemoveAll((typeof(LineGraph)));
-            }
+            plotter.Children.RemoveAll((typeof(LineGraph)));
+
             //教則
             var managedTarget = this.TrainingInfo.RangeTrackingTargets.Where(tar => tar.isManageTempo == true).First();
             var teachSeries = new EnumerableDataSource<GraphPoint>(managedTarget.generateBindingGraphCollection());
