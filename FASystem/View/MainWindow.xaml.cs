@@ -78,6 +78,8 @@ namespace FASystem
         /// </summary>
         private DispatcherTimer dispTimer;
 
+        private Boolean isTraining;
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -105,6 +107,8 @@ namespace FASystem
 
             KinectRegion.SetKinectRegion(this, kinectRegion);
             this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
+
+            this.isTraining = false;
         }
 
         /// <summary>
@@ -155,7 +159,7 @@ namespace FASystem
         /// <param name="e"></param>
         private void bodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
-            if (this.TrainingInfo == null) return;
+            if (this.TrainingInfo == null || this.isTraining == false) return;
 
             frameCount++;
 
@@ -499,6 +503,7 @@ namespace FASystem
             if (this.countdown == 0 || this.countdown == -1)
             {
                 this.messageTextBlock.Text = "トレーニングを開始してください";
+                this.isTraining = true;
             } else if (this.countdown == -2)
             {
                 this.messageTextBlock.Text = "トレーニング中...";
@@ -548,6 +553,7 @@ namespace FASystem
         private void trainingEndButton_Click(object sender, RoutedEventArgs e)
         {
             this.finishedTraining();
+            this.isTraining = false;
         }
     }
 }
